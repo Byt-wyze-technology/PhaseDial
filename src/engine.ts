@@ -1,0 +1,49 @@
+export type Stage = "prepare" | "superposition" | "kickback" | "qft" | "measure";
+
+export const stages: { id: Stage; label: string; short: string }[] = [
+  { id: "prepare", label: "Prepare eigenstate", short: "01" },
+  { id: "superposition", label: "Create superposition", short: "02" },
+  { id: "kickback", label: "Controlled evolution", short: "03" },
+  { id: "qft", label: "Inverse QFT", short: "04" },
+  { id: "measure", label: "Measure phase", short: "05" }
+];
+
+export const clampPhase = (phase: number) => ((phase % 1) + 1) % 1;
+
+export function phaseFromEnergy(energy: number, time: number) {
+  return clampPhase((energy * time) / (2 * Math.PI));
+}
+
+export function nearestEstimate(phase: number, bits: number) {
+  const size = 2 ** bits;
+  const index = Math.round(clampPhase(phase) * size) % size;
+  return { index, phase: index / size, bits: index.toString(2).padStart(bits, "0") };
+}
+
+export function qpeProbability(phase: number, outcome: number, bits: number) {
+  const size = 2 ** bits;
+  const delta = clampPhase(phase) - outcome / size;
+  if (Math.abs(delta) < 1e-12) return 1;
+  const top = Math.sin(Math.PI * size * delta);
+  const bottom = size * Math.sin(Math.PI * delta);
+  return Math.min(1, (top / bottom) ** 2);
+}
+
+export function distribution(phase: number, bits: number) {
+  const size = 2 ** bits;
+  return Array.from({ length: size }, (_, outcome) => ({
+    outcome,
+    bits: outcome.toString(2).padStart(bits, "0"),
+    probability: qpeProbability(phase, outcome, bits)
+  }));
+}
+
+export function seededMeasure(phase: number, bits: number, seed: number) {
+  const values = distribution(phase, bits);
+  let cursor = ((Math.sin(seed * 999) + 1) / 2) * values.reduce((s, v) => s + v.probability, 0);
+  for (const value of values) {
+    cursor -= value.probability;
+    if (cursor <= 0) return value;
+  }
+  return values.at(-1)!;
+}
