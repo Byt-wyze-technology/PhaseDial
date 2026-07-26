@@ -10,10 +10,11 @@
 </p>
 
 <p align="center">
-  <img alt="React 18" src="https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white">
-  <img alt="TypeScript 5.7" src="https://img.shields.io/badge/TypeScript-5.7-3178C6?logo=typescript&logoColor=white">
-  <img alt="Vite 6" src="https://img.shields.io/badge/Vite-6-646CFF?logo=vite&logoColor=white">
-  <img alt="Tests: 3 passing" src="https://img.shields.io/badge/tests-3%20passing-58d6bd">
+  <img alt="React 19" src="https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white">
+  <img alt="TypeScript 7" src="https://img.shields.io/badge/TypeScript-7-3178C6?logo=typescript&logoColor=white">
+  <img alt="Vite 8" src="https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white">
+  <img alt="Tests: 7 passing" src="https://img.shields.io/badge/tests-7%20passing-58d6bd">
+  <img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-6ef0ce">
 </p>
 
 ---
@@ -44,10 +45,10 @@ does not claim a quantum speed-up for the small examples shown in the browser.
 
 ## Start here
 
-You need a recent version of Node.js and npm.
+You need Node.js 20.19 or later and npm 10 or later.
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
@@ -325,9 +326,18 @@ QPE stage. Dedicated assessments and separate module pages are future work.
 
 ```text
 PhaseDial/
+├── .github/                  # CI, Dependabot, and contribution templates
+├── docs/
+│   ├── ARCHITECTURE.md       # Runtime and deployment architecture
+│   ├── MATHEMATICAL_MODEL.md # Implemented equations and invariants
+│   ├── PRODUCT_VISION.md     # Scope and learning goals
+│   └── ROADMAP.md            # Possible future work
 ├── README.md                  # Learning-first guide
-├── PhaseDial.md               # Original product vision
-├── PhaseDial-Mathematics.md   # Formal mathematical specification
+├── CONTRIBUTING.md            # Contributor workflow
+├── SECURITY.md                # Private vulnerability reporting
+├── CHANGELOG.md               # Release history
+├── CODE_OF_CONDUCT.md         # Community standards
+├── LICENSE                    # MIT license
 ├── src/
 │   ├── App.tsx                # Interactive learning interface
 │   ├── engine.ts              # Phase and QPE probability calculations
@@ -360,8 +370,12 @@ npm test
 The current tests check:
 
 - energy-time conversion to phase turns;
+- positive and negative phase wrapping;
 - nearest finite-precision phase estimation;
-- conservation of total measurement probability.
+- register-boundary rounding;
+- exact-grid probability behavior;
+- conservation of total measurement probability;
+- sampled outcome and bitstring bounds.
 
 Run:
 
@@ -376,8 +390,11 @@ This performs a strict TypeScript build and creates a Vite production bundle in
 
 ## Mathematical invariants and boundaries
 
-The governing mathematical specification is
-[`PhaseDial-Mathematics.md`](PhaseDial-Mathematics.md).
+The implemented equations and numerical boundaries are documented in
+[`docs/MATHEMATICAL_MODEL.md`](docs/MATHEMATICAL_MODEL.md). The broader learning
+goals are documented separately in
+[`docs/PRODUCT_VISION.md`](docs/PRODUCT_VISION.md), so future intent is not
+confused with current behavior.
 
 The active release maintains these narrower, verified properties:
 
@@ -437,3 +454,32 @@ finite-bit estimate
 ```
 
 That is the PhaseDial: an invisible rotation made readable.
+
+---
+
+## Project documentation
+
+- [Product vision](docs/PRODUCT_VISION.md)
+- [Mathematical model](docs/MATHEMATICAL_MODEL.md)
+- [Architecture and deployment characteristics](docs/ARCHITECTURE.md)
+- [Roadmap](docs/ROADMAP.md)
+- [Changelog](CHANGELOG.md)
+- [Contributing guide](CONTRIBUTING.md)
+- [Security policy](SECURITY.md)
+- [Support](SUPPORT.md)
+- [Governance](GOVERNANCE.md)
+
+## Contributing
+
+Contributions are welcome. Start with [CONTRIBUTING.md](CONTRIBUTING.md), follow
+the [Code of Conduct](CODE_OF_CONDUCT.md), and run:
+
+```bash
+npm run check
+```
+
+before opening a pull request.
+
+## License
+
+PhaseDial is open source under the [MIT License](LICENSE).

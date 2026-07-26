@@ -1,6 +1,17 @@
 node_modules/
 dist/
+coverage/
 *.tsbuildinfo
 vite.config.js
 vite.config.d.ts
+.env
+.env.*
+!.env.example
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.log
+.npm/
 .DS_Store
+Thumbs.db
