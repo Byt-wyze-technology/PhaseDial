@@ -39,20 +39,20 @@ quantum computer.
 
 ## The one idea you need
 
-Imagine a system with an energy value \(E\). If the system starts in an energy
+Imagine a system with an energy value $E$. If the system starts in an energy
 eigenstate, time evolution does not move it to another energy level. Instead,
 it adds a complex phase:
 
-\[
+$$
 |E\rangle \longrightarrow e^{-iEt}|E\rangle.
-\]
+$$
 
 You can picture that phase as the hand of a clock. In PhaseDial, one complete
-turn is written as `1.0`, so the phase after time \(t\) is
+turn is written as `1.0`, so the phase after time $t$ is
 
-\[
+$$
 \phi=\frac{Et}{2\pi}\pmod 1.
-\]
+$$
 
 The `mod 1` just means that after one full turn, the hand starts around the dial
 again.
@@ -85,9 +85,9 @@ PhaseDial breaks the algorithm into five steps.
 
 We begin with a state whose energy is well defined:
 
-\[
+$$
 H|E\rangle=E|E\rangle.
-\]
+$$
 
 This matters because an eigenstate keeps the same physical probabilities while
 its phase rotates. It gives us one clean frequency to estimate.
@@ -95,26 +95,26 @@ its phase rotates. It gives us one clean frequency to estimate.
 ### 2. Create a control register
 
 We add a small group of ancilla qubits and place them in a uniform
-superposition. If there are \(n\) ancillas, the register represents
-\(2^n\) different time labels at once:
+superposition. If there are $n$ ancillas, the register represents
+$2^n$ different time labels at once:
 
-\[
+$$
 \frac{1}{\sqrt{2^n}}\sum_{x=0}^{2^n-1}|x\rangle.
-\]
+$$
 
 You can think of these labels as several clocks that are about to run for
 different lengths of time.
 
 ### 3. Apply controlled evolution
 
-Each control value \(x\) asks the energy state to evolve by a corresponding
+Each control value $x$ asks the energy state to evolve by a corresponding
 amount:
 
-\[
+$$
 |x\rangle|E\rangle
 \longrightarrow
 e^{2\pi i\phi x}|x\rangle|E\rangle.
-\]
+$$
 
 The energy state comes back unchanged. The useful information appears in the
 relative phases of the control register. This is **phase kickback**.
@@ -129,7 +129,7 @@ pattern still cannot be read directly.
 The inverse Quantum Fourier Transform makes the control states interfere.
 Values that agree with the hidden phase reinforce each other. Values that do
 not agree mostly cancel out. The result is a probability peak near
-\(2^n\phi\).
+$2^n\phi$.
 
 The QFT does not magically create the answer. It changes the basis so that a
 phase pattern becomes a position we can measure.
@@ -156,7 +156,7 @@ four-bit estimate.
 
 ## Why the answer is a probability distribution
 
-A register with \(n\) ancillas has only \(2^n\) possible answers. Four ancillas
+A register with $n$ ancillas has only $2^n$ possible answers. Four ancillas
 can point to:
 
 ```text
@@ -181,10 +181,10 @@ Every extra ancilla doubles the available phase resolution:
 
 | Ancillas | Possible outcomes | Phase spacing |
 | ---: | ---: | ---: |
-| 2 | 4 | \(1/4\) |
-| 3 | 8 | \(1/8\) |
-| 4 | 16 | \(1/16\) |
-| 8 | 256 | \(1/256\) |
+| 2 | 4 | $1/4$ |
+| 3 | 8 | $1/8$ |
+| 4 | 16 | $1/16$ |
+| 8 | 256 | $1/256$ |
 
 More ancillas mean more precision, but never infinite precision.
 
