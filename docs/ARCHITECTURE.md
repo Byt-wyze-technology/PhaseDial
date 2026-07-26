@@ -27,6 +27,10 @@ src/
 ├── engine.test.ts  mathematical engine tests
 ├── main.tsx        React DOM entry point
 └── styles.css      layout, visual design, responsive rules, reduced motion
+
+scripts/
+└── capture-readme-screenshots.mjs
+                    production-preview capture for README figures
 ```
 
 ## Engine boundary
@@ -82,6 +86,10 @@ npm run build
 
 GitHub Actions executes both commands using the lockfile and Node version in
 `.nvmrc`.
+
+README screenshots are reproducible browser artifacts. `npm run screenshots`
+builds the app, starts Vite's production preview, captures three Chromium
+views, and writes them to `images/`.
 
 ## Deployment characteristics
 

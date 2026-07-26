@@ -14,12 +14,16 @@ tagged releases.
 - Contribution, security, support, and governance guidance.
 - GitHub issue forms, pull request template, CI, and Dependabot configuration.
 - Maintainer-facing architecture and mathematical-model documentation.
+- Reproducible browser screenshots for the overview, guided QPE lab, and
+  measurement readout.
+- A Playwright screenshot-capture command for keeping README figures current.
 
 ### Changed
 
 - Repository metadata and documentation aligned with the active implementation.
 - Build-only packages classified as development dependencies.
 - React, TypeScript, Vite, and Vitest updated to their current major releases.
+- README rewritten as a plain-English, screenshot-led learning guide.
 
 ## [1.0.0] - 2026-07-25
 

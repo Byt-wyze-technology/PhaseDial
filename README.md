@@ -1,50 +1,216 @@
-# PhaseDial Explorer
+# PhaseDial
 
-<p align="center">
-  <strong>See energy become a phase. Read the invisible dial.</strong>
-</p>
+[![CI](https://github.com/Byt-wyze-technology/PhaseDial/actions/workflows/ci.yml/badge.svg)](https://github.com/Byt-wyze-technology/PhaseDial/actions/workflows/ci.yml)
+[![React](https://img.shields.io/badge/React-19-20232A?logo=react&logoColor=61DAFB)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-7-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-<p align="center">
-  An interactive learning repository for quantum phase estimation,<br />
-  phase kickback, finite precision, and the quantum Fourier transform.
-</p>
+**See energy become a phase. Read the invisible dial.**
 
-<p align="center">
-  <img alt="React 19" src="https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white">
-  <img alt="TypeScript 7" src="https://img.shields.io/badge/TypeScript-7-3178C6?logo=typescript&logoColor=white">
-  <img alt="Vite 8" src="https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white">
-  <img alt="Tests: 7 passing" src="https://img.shields.io/badge/tests-7%20passing-58d6bd">
-  <img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-6ef0ce">
-  <a href="https://github.com/Byt-wyze-technology/PhaseDial/actions/workflows/ci.yml"><img alt="CI status" src="https://github.com/Byt-wyze-technology/PhaseDial/actions/workflows/ci.yml/badge.svg"></a>
-</p>
+Quantum phase estimation is one of the most useful ideas in quantum computing.
+It sits inside algorithms for finding energies, simulating molecules, and
+factoring numbers. But it is often taught as a wall of circuit diagrams before
+anyone explains what the circuit is trying to see.
 
----
+The idea is much simpler than the circuit makes it look:
 
-## Why this repository exists
+> An energy eigenstate behaves like a clock. Its hand turns at a rate set by
+> its energy. Quantum phase estimation reads that hidden clock.
 
-Quantum phase estimation is often introduced as a circuit to memorize:
+I built **PhaseDial** to make that idea visible. You can change the energy,
+change how long the state evolves, step through the algorithm, and watch a
+hidden phase turn into an ordinary binary number.
 
-1. prepare ancillas;
-2. apply controlled powers of a unitary;
-3. apply the inverse quantum Fourier transform;
-4. measure.
+This is a learning tool. It runs on a normal laptop and does not connect to a
+quantum computer.
 
-That description is correct, but it hides the physical story.
+## Who should use PhaseDial?
 
-PhaseDial starts one step earlier. It asks:
+- Students meeting quantum phase estimation for the first time.
+- Software engineers who understand algorithms better by changing inputs.
+- Teachers looking for an interactive classroom demonstration.
+- Anyone who wants intuition before working through the full linear algebra.
 
-> If an energy eigenstate only accumulates an invisible phase, how can a quantum
-> computer turn that phase into visible classical bits?
+## Interactive teaching app
 
-The app lets you follow the answer from energy, to rotation, to phase kickback,
-to interference, and finally to a finite-precision bitstring.
-
-This is a teaching simulator. It does not connect to quantum hardware and it
-does not claim a quantum speed-up for the small examples shown in the browser.
+![PhaseDial showing energy as a rotating phase clock](images/phasedial_overview.png)
 
 ---
 
-## Start here
+## The one idea you need
+
+Imagine a system with an energy value \(E\). If the system starts in an energy
+eigenstate, time evolution does not move it to another energy level. Instead,
+it adds a complex phase:
+
+\[
+|E\rangle \longrightarrow e^{-iEt}|E\rangle.
+\]
+
+You can picture that phase as the hand of a clock. In PhaseDial, one complete
+turn is written as `1.0`, so the phase after time \(t\) is
+
+\[
+\phi=\frac{Et}{2\pi}\pmod 1.
+\]
+
+The `mod 1` just means that after one full turn, the hand starts around the dial
+again.
+
+Here is the default example:
+
+```text
+energy E = π/4
+time   t = 3.2
+
+phase φ = (π/4 × 3.2) / 2π = 0.4 turns
+```
+
+That is why the default dial points to `0.400`.
+
+The difficult part is that this phase is invisible if it belongs to the whole
+state. Measuring the energy state by itself does not reveal where the clock
+hand is pointing.
+
+Quantum phase estimation solves that problem by turning one invisible phase
+into many **relative phases** that can interfere with each other.
+
+---
+
+## How quantum phase estimation reads the clock
+
+PhaseDial breaks the algorithm into five steps.
+
+### 1. Prepare an energy eigenstate
+
+We begin with a state whose energy is well defined:
+
+\[
+H|E\rangle=E|E\rangle.
+\]
+
+This matters because an eigenstate keeps the same physical probabilities while
+its phase rotates. It gives us one clean frequency to estimate.
+
+### 2. Create a control register
+
+We add a small group of ancilla qubits and place them in a uniform
+superposition. If there are \(n\) ancillas, the register represents
+\(2^n\) different time labels at once:
+
+\[
+\frac{1}{\sqrt{2^n}}\sum_{x=0}^{2^n-1}|x\rangle.
+\]
+
+You can think of these labels as several clocks that are about to run for
+different lengths of time.
+
+### 3. Apply controlled evolution
+
+Each control value \(x\) asks the energy state to evolve by a corresponding
+amount:
+
+\[
+|x\rangle|E\rangle
+\longrightarrow
+e^{2\pi i\phi x}|x\rangle|E\rangle.
+\]
+
+The energy state comes back unchanged. The useful information appears in the
+relative phases of the control register. This is **phase kickback**.
+
+![The guided QPE lab at the controlled-evolution step](images/qpe_guided_lab.png)
+
+### 4. Apply the inverse Quantum Fourier Transform
+
+At this point the answer is spread across a pattern of complex phases. That
+pattern still cannot be read directly.
+
+The inverse Quantum Fourier Transform makes the control states interfere.
+Values that agree with the hidden phase reinforce each other. Values that do
+not agree mostly cancel out. The result is a probability peak near
+\(2^n\phi\).
+
+The QFT does not magically create the answer. It changes the basis so that a
+phase pattern becomes a position we can measure.
+
+### 5. Measure
+
+Measurement returns a normal bitstring such as:
+
+```text
+0110
+```
+
+For four ancilla qubits this means:
+
+```text
+binary 0110 = decimal 6
+estimated phase = 6 / 16 = 0.375 turns
+```
+
+The true phase in the default example is `0.400`, so `0.375` is the nearest
+four-bit estimate.
+
+---
+
+## Why the answer is a probability distribution
+
+A register with \(n\) ancillas has only \(2^n\) possible answers. Four ancillas
+can point to:
+
+```text
+0/16, 1/16, 2/16, ... 15/16
+```
+
+But `0.400` is not exactly on that grid. The algorithm therefore cannot place
+all probability on one exact answer. Most probability gathers around the
+closest values instead.
+
+![The QPE measurement distribution and finite-bit estimate](images/phase_measurement.png)
+
+In the chart:
+
+- the tall bars are the bitstrings you are most likely to measure;
+- the highlighted bar is the latest sampled result;
+- the values underneath compare the true phase with the nearest finite-bit
+  estimate;
+- increasing the ancilla count makes the grid finer.
+
+Every extra ancilla doubles the available phase resolution:
+
+| Ancillas | Possible outcomes | Phase spacing |
+| ---: | ---: | ---: |
+| 2 | 4 | \(1/4\) |
+| 3 | 8 | \(1/8\) |
+| 4 | 16 | \(1/16\) |
+| 8 | 256 | \(1/256\) |
+
+More ancillas mean more precision, but never infinite precision.
+
+---
+
+## The bridge: classical frequency finding and QPE
+
+There is a useful classical picture.
+
+If you record a rotating signal at many times, a Fourier transform can reveal
+its frequency. Quantum phase estimation follows the same broad pattern:
+
+| Classical signal processing | Quantum phase estimation |
+| --- | --- |
+| A signal rotates at an unknown frequency | An eigenstate accumulates an unknown phase |
+| Record the signal at several times | Apply controlled evolution for several time labels |
+| A Fourier transform reveals a frequency peak | An inverse QFT creates a phase peak |
+| Read the peak location | Measure a bitstring |
+
+The analogy explains why a Fourier transform appears. It does **not** mean this
+browser app reproduces a quantum speed-up. PhaseDial calculates small ideal
+examples classically.
+
+---
+
+## Try it yourself
 
 You need Node.js 20.19 or later and npm 10 or later.
 
@@ -57,433 +223,82 @@ npm run dev
 
 Open the local address printed by Vite.
 
-To verify the mathematical engine and build the production bundle:
-
-```bash
-npm test
-npm run build
-```
-
----
-
-## The central idea
-
-Let a Hamiltonian \(H\) have an energy eigenstate \(|E\rangle\):
-
-\[
-H|E\rangle = E|E\rangle.
-\]
-
-Time evolution is generated by
-
-\[
-U(t)=e^{-iHt}.
-\]
-
-Because \(|E\rangle\) is an eigenstate, evolution does not change its basis
-probabilities:
-
-\[
-U(t)|E\rangle=e^{-iEt}|E\rangle.
-\]
-
-The state acquires only a phase. Expressed as a fraction of one full turn,
-PhaseDial uses
-
-\[
-\phi=\frac{Et}{2\pi}\pmod 1.
-\]
-
-The challenge is that a global phase is not directly observable. Quantum phase
-estimation makes it observable by transferring a *relative* phase to a control
-register.
-
----
-
-## Learn by experiment
-
-The repository is designed to be explored in order. Each experiment changes one
-idea while keeping the rest of the system visible.
-
-### Experiment 1 — Energy is a clock rate
-
-Choose **Two-level atom** and set the evolution time to zero.
-
-Then:
-
-1. press play;
-2. watch the phase hand rotate;
-3. pause at \(t=4\).
-
-For the default energy \(E=\pi/4\),
-
-\[
-\phi=\frac{(\pi/4)(4)}{2\pi}=\frac12.
-\]
-
-The dial should point to half a turn.
-
-**What to notice:** energy controls the rate of phase accumulation. The state
-is not moving between energy levels.
-
-### Experiment 2 — Precision comes in bits
-
-Keep the phase somewhere between tick marks and change the ancilla count from
-two to eight.
-
-With \(n\) ancilla qubits, the register has
-
-\[
-N=2^n
-\]
-
-possible outcomes and a phase grid spacing of
-
-\[
-\Delta\phi=\frac{1}{2^n}.
-\]
-
-**What to notice:** one extra ancilla doubles the number of representable phase
-positions. It does not reveal infinitely many digits.
-
-### Experiment 3 — Build the QPE pipeline
-
-Use the operation timeline in the lab:
-
-1. **Prepare eigenstate**
-2. **Create superposition**
-3. **Controlled evolution**
-4. **Inverse QFT**
-5. **Measure phase**
-
-At each stage, read the live equation and inspect the control register.
-
-The register begins in
-
-\[
-|+\rangle^{\otimes n}
-=
-\frac{1}{\sqrt{2^n}}
-\sum_{x=0}^{2^n-1}|x\rangle.
-\]
-
-Controlled evolution then creates
-
-\[
-|x\rangle|E\rangle
-\longrightarrow
-e^{2\pi i\phi x}|x\rangle|E\rangle.
-\]
-
-**What to notice:** the target eigenstate is unchanged. The useful information
-has moved into the relative phases of the control amplitudes.
-
-### Experiment 4 — Interference creates the peak
-
-Advance to **Inverse QFT** and inspect the probability chart.
-
-The inverse QFT transforms a phase pattern into a measurement distribution:
-
-\[
-QFT^{-1}
-\left(
-\frac{1}{\sqrt N}
-\sum_{x=0}^{N-1}e^{2\pi i\phi x}|x\rangle
-\right).
-\]
-
-If \(N\phi\) is an integer, all probability lands on one bitstring. Otherwise,
-probability spreads around the nearest representable values.
-
-**What to notice:** QPE is probabilistic even though the target phase is fixed.
-Finite register size determines the shape of the readout.
-
-### Experiment 5 — Measure more than once
-
-At the final stage, select **Measure again** several times.
-
-The simulator samples from the finite-register QPE distribution. The displayed
-bitstring \(m\) represents
-
-\[
-\widetilde\phi=\frac{m}{2^n}.
-\]
-
-Compare the true phase, the nearest finite-bit estimate, and the absolute error
-shown under the chart.
-
-**What to notice:** repeated measurements may differ near a boundary, but the
-distribution remains concentrated around the target phase.
-
-### Experiment 6 — Compare physical systems
-
-Try:
-
-- **Two-level atom** — a clean introductory clock;
-- **Spin in a field** — a symmetric pair of energy levels;
-- **Molecular modes** — a four-level spectrum.
-
-The current interface selects one displayed eigenenergy from each system. The
-energy spectrum is educational context; this release does not yet provide a
-general matrix editor or arbitrary eigenstate preparation.
-
----
-
-## Classical signal processing and QPE
-
-There is a useful analogy between classical frequency estimation and quantum
-phase estimation.
-
-| Classical route | Quantum route |
-| --- | --- |
-| A complex signal rotates with an unknown frequency | An eigenstate evolves with an unknown eigenphase |
-| Samples are collected at several times | Controlled powers query several evolution durations |
-| A Fourier transform reveals a frequency peak | An inverse QFT reveals a phase peak |
-| The peak labels the estimated frequency | The measured bitstring labels the estimated phase |
-
-The analogy explains the signal structure. It does **not** imply that an
-ordinary FFT reproduces quantum query complexity or that this browser
-simulation demonstrates quantum advantage.
-
----
-
-## What the simulator calculates
-
-The active mathematical engine lives in
-[`src/engine.ts`](src/engine.ts).
-
-### Phase wrapping
-
-The phase is always represented in the interval
-
-\[
-[0,1).
-\]
-
-Negative or multi-turn values are wrapped modulo one.
-
-### Nearest finite-bit estimate
-
-For \(n\) ancillas, PhaseDial rounds the target to the nearest point on the
-\(2^n\)-position phase grid:
-
-\[
-m=\operatorname{round}(2^n\phi)\pmod{2^n},
-\qquad
-\widetilde\phi=\frac{m}{2^n}.
-\]
-
-### Ideal QPE measurement probability
-
-For outcome \(m\), register size \(N=2^n\), and target phase \(\phi\), the engine
-uses
-
-\[
-P(m)=
-\left|
-\frac{1}{N}
-\sum_{x=0}^{N-1}
-e^{2\pi i x(\phi-m/N)}
-\right|^2.
-\]
-
-For a non-exact phase this is evaluated as
-
-\[
-P(m)=
-\left[
-\frac{\sin\!\left(\pi N(\phi-m/N)\right)}
-{N\sin\!\left(\pi(\phi-m/N)\right)}
-\right]^2.
-\]
-
-The exact-grid case is handled separately so that its probability is exactly
-one rather than an undefined \(0/0\) numerical expression.
-
----
-
-## Learning map
-
-The interface presents ten topic prompts. The currently implemented interactive
-lab directly supports the following learning path:
-
-| Module | Question |
-| ---: | --- |
-| 1 | Why are large quantum systems difficult to represent classically? |
-| 2 | What makes an energy eigenstate special? |
-| 3 | Why does time evolution look like rotation? |
-| 4 | Why is global phase invisible? |
-| 5 | How does classical frequency estimation help explain QPE? |
-| 6 | What does controlled evolution do? |
-| 7 | How does phase kickback preserve the target state? |
-| 8 | Why does the inverse QFT create a measurement peak? |
-| 9 | How do the QPE stages fit together? |
-| 10 | How do ancilla count and finite precision relate? |
-
-The topic buttons currently return to the shared lab at the closest relevant
-QPE stage. Dedicated assessments and separate module pages are future work.
-
----
-
-## Repository structure
-
-```text
-PhaseDial/
-├── .github/                  # CI, Dependabot, and contribution templates
-├── docs/
-│   ├── ARCHITECTURE.md       # Runtime and deployment architecture
-│   ├── MATHEMATICAL_MODEL.md # Implemented equations and invariants
-│   ├── PRODUCT_VISION.md     # Scope and learning goals
-│   └── ROADMAP.md            # Possible future work
-├── README.md                  # Learning-first guide
-├── CONTRIBUTING.md            # Contributor workflow
-├── SECURITY.md                # Private vulnerability reporting
-├── CHANGELOG.md               # Release history
-├── CODE_OF_CONDUCT.md         # Community standards
-├── LICENSE                    # MIT license
-├── src/
-│   ├── App.tsx                # Interactive learning interface
-│   ├── engine.ts              # Phase and QPE probability calculations
-│   ├── engine.test.ts         # Mathematical engine checks
-│   ├── main.tsx               # React entry point
-│   └── styles.css             # Responsive visual system
-├── index.html
-├── package.json
-└── vite.config.ts
-```
-
-The implementation is intentionally split into two layers:
-
-- `engine.ts` contains deterministic mathematical functions;
-- `App.tsx` renders and coordinates the learning experience.
-
-The React interface consumes engine results instead of reimplementing the QPE
-formulas inside individual visual components.
-
----
-
-## Verification
-
-Run:
-
-```bash
-npm test
-```
-
-The current tests check:
-
-- energy-time conversion to phase turns;
-- positive and negative phase wrapping;
-- nearest finite-precision phase estimation;
-- register-boundary rounding;
-- exact-grid probability behavior;
-- conservation of total measurement probability;
-- sampled outcome and bitstring bounds.
-
-Run:
-
-```bash
-npm run build
-```
-
-This performs a strict TypeScript build and creates a Vite production bundle in
-`dist/`.
-
----
-
-## Mathematical invariants and boundaries
-
-The implemented equations and numerical boundaries are documented in
-[`docs/MATHEMATICAL_MODEL.md`](docs/MATHEMATICAL_MODEL.md). The broader learning
-goals are documented separately in
-[`docs/PRODUCT_VISION.md`](docs/PRODUCT_VISION.md), so future intent is not
-confused with current behavior.
-
-The active release maintains these narrower, verified properties:
-
-- displayed phase is wrapped to \([0,1)\);
-- the QPE output distribution sums to one within floating-point tolerance;
-- finite precision is explicit and controlled by the ancilla count;
-- exact representable phases produce unit probability at the matching outcome;
-- the interface identifies itself as a teaching simulator.
-
-Important boundaries:
-
-- no quantum hardware is connected;
-- no noisy-device model is implemented;
-- no arbitrary Hamiltonian matrix input is implemented;
-- the current engine models ideal finite-register QPE probabilities rather than
-  constructing a complete joint system-register state vector;
-- the bundled systems are pedagogical presets;
-- the classical comparison is an analogy, not a complexity equivalence;
-- no quantum-advantage claim is made for these browser-sized examples.
-
-These boundaries are deliberate. A learning tool is more useful when it is
-clear about which parts are simulated, which parts are illustrated, and which
-claims remain outside its evidence.
-
----
-
-## Suggested next investigations
-
-If you want to extend the repository, useful next steps are:
-
-1. add arbitrary Hermitian matrix entry and verified diagonalization;
-2. represent eigenstate superpositions and show their multi-peak QPE output;
-3. display control-register amplitudes before and after the inverse QFT;
-4. add dedicated checkpoints for each learning module;
-5. add browser-level accessibility and responsive-layout tests;
-6. expose exact and analytical execution modes as explicit engine types.
-
-Any mathematical extension should add a test that checks normalization or
-probability conservation at the same time.
-
----
-
-## A compact mental model
-
-If you remember only one sequence, remember this:
-
-```text
-energy
-  ↓ time evolution
-phase
-  ↓ controlled powers
-relative phase pattern
-  ↓ inverse QFT
-probability peak
-  ↓ measurement
-finite-bit estimate
-```
-
-That is the PhaseDial: an invisible rotation made readable.
-
----
-
-## Project documentation
-
-- [Product vision](docs/PRODUCT_VISION.md)
-- [Mathematical model](docs/MATHEMATICAL_MODEL.md)
-- [Architecture and deployment characteristics](docs/ARCHITECTURE.md)
-- [Roadmap](docs/ROADMAP.md)
-- [Changelog](CHANGELOG.md)
-- [Contributing guide](CONTRIBUTING.md)
-- [Security policy](SECURITY.md)
-- [Support](SUPPORT.md)
-- [Governance](GOVERNANCE.md)
-
-## Contributing
-
-Contributions are welcome. Start with [CONTRIBUTING.md](CONTRIBUTING.md), follow
-the [Code of Conduct](CODE_OF_CONDUCT.md), and browse the
-[open issues](https://github.com/Byt-wyze-technology/PhaseDial/issues). Run:
+Try these experiments:
+
+1. Set the two-level atom to time `4.0`. The phase should be half a turn.
+2. Pause between two phase-grid points and raise the ancilla count.
+3. Step from **Prepare eigenstate** to **Measure phase** one operation at a
+   time.
+4. Measure the same phase several times and compare the returned bitstrings.
+5. Change physical systems and watch the energy change the rotation rate.
+
+Run the checks:
 
 ```bash
 npm run check
 ```
 
-before opening a pull request.
+Regenerate the README screenshots after a visible UI change:
+
+```bash
+npx playwright install chromium
+npm run screenshots
+```
+
+---
+
+## What's in here
+
+- `src/engine.ts` — the phase wrapping, finite-bit estimate, ideal QPE
+  probabilities, and measurement sampling.
+- `src/App.tsx` — the interactive lesson, controls, and visualizations.
+- `src/engine.test.ts` — tests for phase conversion, boundaries, normalization,
+  and measurement outcomes.
+- `scripts/capture-readme-screenshots.mjs` — captures the three figures above
+  from the production build.
+- `docs/` — the product vision, implemented mathematical model, architecture,
+  and roadmap.
+- `.github/` — CI, Dependabot, issue forms, and the pull-request template.
+
+The numerical engine is deliberately separate from the React interface. The
+dial, estimate, and probability chart all read from the same calculated state.
+
+For more detail:
+
+- [Product vision](docs/PRODUCT_VISION.md)
+- [Mathematical model](docs/MATHEMATICAL_MODEL.md)
+- [Architecture](docs/ARCHITECTURE.md)
+- [Roadmap](docs/ROADMAP.md)
+- [Changelog](CHANGELOG.md)
+
+---
+
+## What this is — and what it isn't
+
+PhaseDial **is** a teaching tool for building intuition about energy phase,
+phase kickback, the inverse QFT, and finite-bit measurement. Play with it, make
+a prediction, change a control, and see whether the result matches.
+
+It **isn't** a quantum-hardware interface, a noisy-device simulator, or a full
+joint state-vector engine. The current release calculates the ideal
+finite-register QPE distribution for one selected eigenphase. The moving qubit
+arrows and circuit stages are teaching illustrations built around those
+calculated values.
+
+It also does not claim quantum advantage. These examples are intentionally
+small enough to run instantly in a web browser.
+
+---
+
+## Contributing
+
+Contributions are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md), follow the
+[Code of Conduct](CODE_OF_CONDUCT.md), and check the
+[open issues](https://github.com/Byt-wyze-technology/PhaseDial/issues).
+
+Please report vulnerabilities privately using the process in
+[SECURITY.md](SECURITY.md).
 
 ## License
 
-PhaseDial is open source under the [MIT License](LICENSE).
+MIT — see [LICENSE](LICENSE).

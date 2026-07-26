@@ -91,6 +91,15 @@ The first command runs the Vitest engine suite. The second runs strict
 TypeScript checks and produces the Vite build. Pull requests are expected to
 pass both.
 
+For a visible interface change, refresh the README figures:
+
+```bash
+npx playwright install chromium
+npm run screenshots
+```
+
+Commit updated images only when the rendered interface actually changed.
+
 ## Documentation
 
 Runtime code and tests are authoritative. If a narrative document conflicts
