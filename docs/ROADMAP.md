@@ -30,7 +30,8 @@ This roadmap records possible directions, not promised release dates.
 - Add release automation and tagged release notes.
 - Add Firefox and WebKit browser coverage.
 - Add a documented visual-regression workflow.
-- Define a public maintainer contact and private conduct-reporting channel.
+- Define a dedicated private conduct-reporting address beyond the organization
+  contact linked in the Code of Conduct.
 
 Proposals should begin with the learner outcome and include the mathematical
 invariant or acceptance check that will verify the result.

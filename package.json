@@ -4,6 +4,14 @@
   "version": "1.0.0",
   "description": "An interactive learning simulator for quantum phase estimation, phase kickback, and finite precision.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Byt-wyze-technology/PhaseDial.git"
+  },
+  "homepage": "https://github.com/Byt-wyze-technology/PhaseDial#readme",
+  "bugs": {
+    "url": "https://github.com/Byt-wyze-technology/PhaseDial/issues"
+  },
   "keywords": [
     "quantum-computing",
     "quantum-phase-estimation",

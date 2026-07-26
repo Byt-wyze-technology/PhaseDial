@@ -2,13 +2,15 @@
 
 ## Questions and learning help
 
-Use GitHub Discussions when it is enabled. Include the concept you are
-exploring, the system and ancilla settings you used, and what you expected to
-observe.
+Use [GitHub Discussions](https://github.com/Byt-wyze-technology/PhaseDial/discussions)
+when it is enabled. Include the concept you are exploring, the system and
+ancilla settings you used, and what you expected to observe.
 
 ## Bugs
 
-Use the bug-report issue form. Include:
+Use the
+[bug-report issue form](https://github.com/Byt-wyze-technology/PhaseDial/issues/new/choose).
+Include:
 
 - browser and operating system;
 - Node.js version if the problem occurs locally;
@@ -18,9 +20,10 @@ Use the bug-report issue form. Include:
 
 ## Feature ideas
 
-Use the feature-request issue form and explain the learning problem first. A
-good proposal identifies what a learner should understand or be able to test
-after the change.
+Use the
+[feature-request issue form](https://github.com/Byt-wyze-technology/PhaseDial/issues/new/choose)
+and explain the learning problem first. A good proposal identifies what a
+learner should understand or be able to test after the change.
 
 ## Security
 

@@ -45,8 +45,9 @@ officially representing the project in public spaces.
 ## Enforcement
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported privately to the project maintainers. Use a private contact method
-listed on a maintainer's GitHub profile; do not include sensitive details in a
+reported privately to the project maintainers through the
+[Byt-wyze Technology organization](https://github.com/Byt-wyze-technology).
+Ask for a private reporting channel without including sensitive details in a
 public issue. All complaints will be reviewed and investigated promptly and
 fairly. Maintainers must respect the privacy and security of reporters.
 

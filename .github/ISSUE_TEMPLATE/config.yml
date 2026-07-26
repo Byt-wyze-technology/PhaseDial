@@ -1,2 +1,8 @@
 blank_issues_enabled: false
-contact_links: []
+contact_links:
+  - name: Security report
+    url: https://github.com/Byt-wyze-technology/PhaseDial/security/advisories/new
+    about: Report a vulnerability privately. Do not open a public issue.
+  - name: Learning questions and discussion
+    url: https://github.com/Byt-wyze-technology/PhaseDial/discussions
+    about: Ask questions and discuss teaching ideas when Discussions is enabled.

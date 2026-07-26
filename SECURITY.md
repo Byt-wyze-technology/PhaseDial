@@ -10,11 +10,12 @@ recent tagged release. Older releases may not receive security fixes.
 Please do not report suspected vulnerabilities in a public issue, pull request,
 or discussion.
 
-Use GitHub's **Private vulnerability reporting** feature on the repository's
-Security tab when it is available. If private reporting has not yet been
-enabled, contact a maintainer privately through their GitHub profile and ask
-for a secure reporting channel without including exploit details in the first
-message.
+Use the repository's
+[Private vulnerability reporting form](https://github.com/Byt-wyze-technology/PhaseDial/security/advisories/new).
+If private reporting has not yet been enabled, contact the
+[Byt-wyze Technology organization](https://github.com/Byt-wyze-technology)
+privately and ask for a secure reporting channel without including exploit
+details in the first message.
 
 Include:
 

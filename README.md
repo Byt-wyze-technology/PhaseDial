@@ -15,6 +15,7 @@
   <img alt="Vite 8" src="https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white">
   <img alt="Tests: 7 passing" src="https://img.shields.io/badge/tests-7%20passing-58d6bd">
   <img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-6ef0ce">
+  <a href="https://github.com/Byt-wyze-technology/PhaseDial/actions/workflows/ci.yml"><img alt="CI status" src="https://github.com/Byt-wyze-technology/PhaseDial/actions/workflows/ci.yml/badge.svg"></a>
 </p>
 
 ---
@@ -48,6 +49,8 @@ does not claim a quantum speed-up for the small examples shown in the browser.
 You need Node.js 20.19 or later and npm 10 or later.
 
 ```bash
+git clone https://github.com/Byt-wyze-technology/PhaseDial.git
+cd PhaseDial
 npm ci
 npm run dev
 ```
@@ -472,7 +475,8 @@ That is the PhaseDial: an invisible rotation made readable.
 ## Contributing
 
 Contributions are welcome. Start with [CONTRIBUTING.md](CONTRIBUTING.md), follow
-the [Code of Conduct](CODE_OF_CONDUCT.md), and run:
+the [Code of Conduct](CODE_OF_CONDUCT.md), and browse the
+[open issues](https://github.com/Byt-wyze-technology/PhaseDial/issues). Run:
 
 ```bash
 npm run check

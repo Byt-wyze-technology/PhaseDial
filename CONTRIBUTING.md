@@ -8,9 +8,10 @@ participating, you agree to follow the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## Before opening an issue
 
-- Search existing issues to avoid duplicates.
-- Use GitHub Discussions, when enabled, for open-ended questions and teaching
-  ideas.
+- Search [existing issues](https://github.com/Byt-wyze-technology/PhaseDial/issues)
+  to avoid duplicates.
+- Use [GitHub Discussions](https://github.com/Byt-wyze-technology/PhaseDial/discussions),
+  when enabled, for open-ended questions and teaching ideas.
 - Use an issue for a reproducible defect or a concrete proposed change.
 - Report vulnerabilities according to [SECURITY.md](SECURITY.md), never in a
   public issue.
@@ -42,13 +43,15 @@ npm run check
 
 ## Making a change
 
-1. Fork the repository and create a focused branch from the default branch.
+1. Fork [`Byt-wyze-technology/PhaseDial`](https://github.com/Byt-wyze-technology/PhaseDial)
+   and create a focused branch from the default branch.
 2. Keep the change small enough to review.
 3. Add or update tests for mathematical behavior.
 4. Update the README or files in `docs/` when behavior, setup, or limitations
    change.
 5. Run `npm run check`.
-6. Open a pull request using the repository template.
+6. [Open a pull request](https://github.com/Byt-wyze-technology/PhaseDial/compare)
+   using the repository template.
 
 Do not commit generated or machine-local content such as `node_modules/`,
 `dist/`, coverage output, editor state, logs, or `.env` files.
