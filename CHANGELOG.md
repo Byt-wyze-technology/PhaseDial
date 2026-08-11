@@ -20,6 +20,10 @@ tagged releases.
 
 ### Changed
 
+- Corrected displayed estimate error to use circular phase distance at the
+  zero-one boundary.
+- Replaced state-vector and exact-simulation UI claims with analytical
+  ideal-QPE terminology matching the implemented model.
 - Repository metadata and documentation aligned with the active implementation.
 - Build-only packages classified as development dependencies.
 - React, TypeScript, Vite, and Vitest updated to their current major releases.

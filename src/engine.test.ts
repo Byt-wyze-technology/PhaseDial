@@ -3,6 +3,7 @@ import {
   clampPhase,
   distribution,
   nearestEstimate,
+  phaseDistance,
   phaseFromEnergy,
   qpeProbability,
   seededMeasure
@@ -24,6 +25,15 @@ describe("PhaseDial engine", () => {
 
   it("wraps an estimate rounded beyond the final register cell", () => {
     expect(nearestEstimate(0.99, 3)).toEqual({ index: 0, phase: 0, bits: "000" });
+  });
+
+  it("measures phase error across the zero-one boundary", () => {
+    expect(phaseDistance(0.99, 0)).toBeCloseTo(0.01);
+    expect(phaseDistance(0, 0.99)).toBeCloseTo(0.01);
+  });
+
+  it("wraps inputs before measuring phase distance", () => {
+    expect(phaseDistance(1.01, -0.01)).toBeCloseTo(0.02);
   });
 
   it("assigns certainty to an exactly representable phase", () => {

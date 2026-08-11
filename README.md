@@ -249,8 +249,8 @@ npm run screenshots
 
 ## What's in here
 
-- `src/engine.ts` — the phase wrapping, finite-bit estimate, ideal QPE
-  probabilities, and measurement sampling.
+- `src/engine.ts` — phase wrapping and circular distance, the finite-bit
+  estimate, ideal QPE probabilities, and measurement sampling.
 - `src/App.tsx` — the interactive lesson, controls, and visualizations.
 - `src/engine.test.ts` — tests for phase conversion, boundaries, normalization,
   and measurement outcomes.

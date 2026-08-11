@@ -39,6 +39,7 @@ scripts/
 
 - stage metadata;
 - phase wrapping;
+- circular phase-distance calculation;
 - energy-to-phase conversion;
 - nearest finite-bit estimation;
 - ideal QPE outcome probability;

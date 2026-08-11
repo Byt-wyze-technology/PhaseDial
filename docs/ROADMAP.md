@@ -4,7 +4,7 @@ This roadmap records possible directions, not promised release dates.
 
 ## Near term
 
-- Expand mathematical unit tests, including exact-grid and phase-wrap edges.
+- Expand numerical property tests across phase values and register sizes.
 - Add component and browser tests for keyboard use and responsive layouts.
 - Add visible focus styling checks and automated accessibility checks.
 - Self-host fonts or remove the runtime font dependency.

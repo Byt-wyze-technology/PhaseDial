@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import {
-  distribution, nearestEstimate, phaseFromEnergy, seededMeasure, Stage, stages
+  distribution, nearestEstimate, phaseDistance, phaseFromEnergy, seededMeasure, Stage, stages
 } from "./engine";
 
 const systems = [
@@ -110,7 +110,7 @@ export default function App() {
           <span><b>PhaseDial</b><small>QUANTUM EXPLORER</small></span>
         </a>
         <nav><a href="#lab">Lab</a><a href="#bridge">The bridge</a><a href="#learn">Learn</a></nav>
-        <div className="header-status"><span className="status-dot" /> Exact simulation <span className="shortcut">?</span></div>
+        <div className="header-status"><span className="status-dot" /> Ideal QPE model <span className="shortcut">?</span></div>
       </header>
 
       <section className="hero" id="top">
@@ -170,7 +170,7 @@ export default function App() {
                 <button onClick={() => setTime(v => Math.min(8, v + .25))} aria-label="Step time">→</button>
               </div>
             </div>
-            <div className="mode-note"><span className="status-dot" /><div><b>Exact mode</b><small>State vector fully represented</small></div></div>
+            <div className="mode-note"><span className="status-dot" /><div><b>Analytical mode</b><small>Ideal distribution calculated</small></div></div>
           </aside>
 
           <div className="workspace">
@@ -230,7 +230,7 @@ export default function App() {
             <span>→</span>
             <div><small>{bits}-BIT ESTIMATE</small><b>{estimate.phase.toFixed(6)}</b></div>
             <span>→</span>
-            <div><small>ABSOLUTE ERROR</small><b>{Math.abs(phase - estimate.phase).toFixed(6)}</b></div>
+            <div><small>PHASE ERROR</small><b>{phaseDistance(phase, estimate.phase).toFixed(6)}</b></div>
           </div>
         </div>
       </section>
@@ -260,7 +260,7 @@ export default function App() {
       <footer className="footer">
         <div className="brand"><span className="brand-mark"><i /></span><span><b>PhaseDial</b><small>QUANTUM EXPLORER</small></span></div>
         <p>See energy become a phase.<br />Read the invisible dial.</p>
-        <small>Teaching simulator · Exact through small Hilbert spaces · No hardware connection</small>
+        <small>Teaching simulator · Analytical ideal-QPE model · No hardware connection</small>
       </footer>
     </main>
   );

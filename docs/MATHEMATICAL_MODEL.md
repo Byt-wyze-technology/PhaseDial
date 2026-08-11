@@ -47,6 +47,18 @@ $$
 The displayed bitstring is the base-two representation of
 $m_{\mathrm{near}}$, left-padded to $n$ bits.
 
+## Circular phase error
+
+Because phase is periodic, the displayed estimate error is the shortest
+distance around the unit circle:
+
+$$
+d(a,b)=\min\left(|a-b|, 1-|a-b|\right),
+$$
+
+after both inputs are wrapped into $[0,1)$. For example, phases $0.99$ and
+$0.00$ are $0.01$ turns apart, not $0.99$ turns apart.
+
 ## Ideal QPE distribution
 
 For an eigenphase $\phi$, ideal QPE assigns outcome $m$ probability
@@ -92,8 +104,9 @@ The implemented model is expected to maintain:
 4. $m$ remains inside the declared register outcome set;
 5. the bitstring length equals $n$.
 
-The automated suite currently verifies phase conversion, nearest finite-bit
-estimation, and probability normalization.
+The automated suite currently verifies phase conversion, phase wrapping,
+circular phase distance, nearest finite-bit estimation, exact-grid behavior,
+probability normalization, and sampled outcome bounds.
 
 ## Pedagogical versus calculated views
 

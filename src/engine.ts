@@ -10,6 +10,11 @@ export const stages: { id: Stage; label: string; short: string }[] = [
 
 export const clampPhase = (phase: number) => ((phase % 1) + 1) % 1;
 
+export function phaseDistance(a: number, b: number): number {
+  const delta = Math.abs(clampPhase(a) - clampPhase(b));
+  return Math.min(delta, 1 - delta);
+}
+
 export function phaseFromEnergy(energy: number, time: number) {
   return clampPhase((energy * time) / (2 * Math.PI));
 }
