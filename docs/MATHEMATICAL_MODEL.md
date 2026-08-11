@@ -104,9 +104,12 @@ The implemented model is expected to maintain:
 4. $m$ remains inside the declared register outcome set;
 5. the bitstring length equals $n$.
 
-The automated suite currently verifies phase conversion, phase wrapping,
-circular phase distance, nearest finite-bit estimation, exact-grid behavior,
-probability normalization, and sampled outcome bounds.
+The deterministic automated suite verifies phase conversion, phase wrapping,
+circular phase-distance properties, nearest-estimate error bounds, exact-grid
+concentration, finite and bounded probabilities, normalization across every UI
+ancilla size, valid outcome metadata, and reproducible seeded sampling. A
+Chromium regression also verifies the rendered estimate and error across the
+zero-one boundary.
 
 ## Pedagogical versus calculated views
 

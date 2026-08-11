@@ -31,6 +31,10 @@ src/
 scripts/
 └── capture-readme-screenshots.mjs
                     production-preview capture for README figures
+
+tests/
+└── phase-boundary.pw.ts
+                    production-preview browser regression
 ```
 
 ## Engine boundary
@@ -78,15 +82,19 @@ runtime. A fully offline deployment would need to self-host or replace them.
 ## Build and verification
 
 Vite serves the development app and produces static production assets.
-TypeScript runs in strict mode. Vitest runs the engine tests.
+TypeScript runs in strict mode. Vitest runs the engine tests, and Playwright
+runs the circular phase-boundary workflow against the production preview.
 
 ```bash
 npm test
-npm run build
+npm run test:browser
+npm run check
 ```
 
-GitHub Actions executes both commands using the lockfile and Node version in
-`.nvmrc`.
+`npm run test:browser` builds the app before starting the preview. `npm run
+check` runs the unit suite followed by the production build and browser test.
+GitHub Actions installs Chromium and executes both layers using the lockfile and
+Node version in `.nvmrc`.
 
 README screenshots are reproducible browser artifacts. `npm run screenshots`
 builds the app, starts Vite's production preview, captures three Chromium

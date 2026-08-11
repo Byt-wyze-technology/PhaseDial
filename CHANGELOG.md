@@ -17,6 +17,8 @@ tagged releases.
 - Reproducible browser screenshots for the overview, guided QPE lab, and
   measurement readout.
 - A Playwright screenshot-capture command for keeping README figures current.
+- Deterministic numerical property coverage across all supported ancilla sizes.
+- A Chromium regression for circular phase error and measurement interaction.
 
 ### Changed
 
@@ -28,6 +30,7 @@ tagged releases.
 - Build-only packages classified as development dependencies.
 - React, TypeScript, Vite, and Vitest updated to their current major releases.
 - README rewritten as a plain-English, screenshot-led learning guide.
+- CI and local checks extended to build the app and run the browser regression.
 
 ## [1.0.0] - 2026-07-25
 

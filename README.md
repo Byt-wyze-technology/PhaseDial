@@ -238,6 +238,14 @@ Run the checks:
 npm run check
 ```
 
+This runs the deterministic numerical suite, builds the production app, and
+runs the Chromium phase-boundary regression. To run the layers separately:
+
+```bash
+npm test
+npm run test:browser
+```
+
 Regenerate the README screenshots after a visible UI change:
 
 ```bash
@@ -252,8 +260,9 @@ npm run screenshots
 - `src/engine.ts` — phase wrapping and circular distance, the finite-bit
   estimate, ideal QPE probabilities, and measurement sampling.
 - `src/App.tsx` — the interactive lesson, controls, and visualizations.
-- `src/engine.test.ts` — tests for phase conversion, boundaries, normalization,
-  and measurement outcomes.
+- `src/engine.test.ts` — deterministic numerical invariant and boundary tests.
+- `tests/phase-boundary.pw.ts` — Chromium regression coverage for the
+  zero-one phase boundary and measurement interaction.
 - `scripts/capture-readme-screenshots.mjs` — captures the three figures above
   from the production build.
 - `docs/` — the product vision, implemented mathematical model, architecture,

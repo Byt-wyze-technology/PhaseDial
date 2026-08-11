@@ -1,5 +1,7 @@
 # Testing Plan
 
+Implementation status: complete and verified.
+
 This plan defines the next verification increment for PhaseDial. It covers the
 implemented analytical QPE engine and one high-value browser workflow. It does
 not introduce a full component-test suite, visual regression, accessibility
@@ -23,6 +25,8 @@ automation, or cross-browser coverage.
 - `.github/workflows/ci.yml` for automated verification.
 
 ## Work package 1: numerical property coverage
+
+Status: complete.
 
 Expand `src/engine.test.ts` with deterministic, parameterized cases. Use the UI
 ancilla domain `bits in {2, ..., 8}` and a fixed phase corpus containing:
@@ -80,6 +84,8 @@ values.
 
 ## Work package 2: browser boundary regression
 
+Status: complete.
+
 Add a Playwright test configuration and one Chromium test. Reuse the installed
 `playwright` dependency rather than adding a second browser framework.
 
@@ -100,6 +106,8 @@ only if the existing accessible UI cannot identify a value reliably.
 
 ## Work package 3: commands and CI
 
+Status: complete.
+
 Add npm scripts with separate responsibilities:
 
 - `test` continues to run Vitest unit tests;
@@ -113,6 +121,8 @@ least-privilege permissions, concurrency cancellation, and timeout.
 
 ## Work package 4: documentation
 
+Status: complete.
+
 After implementation, update only claims affected by the new coverage:
 
 - `README.md`: verification commands and test-suite description;
@@ -122,6 +132,8 @@ After implementation, update only claims affected by the new coverage:
 - `CHANGELOG.md`: summarize the added numerical and browser regressions.
 
 ## Verification sequence
+
+Status: complete. All commands passed on 2026-08-11.
 
 Run, in order:
 
@@ -144,4 +156,3 @@ The work is complete when:
 - CI runs both unit and browser tests;
 - documentation matches the implemented commands and coverage;
 - no unrelated dependencies or product behavior have changed.
-
