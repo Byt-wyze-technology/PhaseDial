@@ -14,8 +14,21 @@ const representativePhases = [0, 0.000001, 0.123456, 0.5, 0.99, 1 - 1e-9, -0.125
 const probabilityTolerance = 1e-12;
 
 describe("PhaseDial engine", () => {
-  it("maps E·t to phase turns", () => {
-    expect(phaseFromEnergy(Math.PI / 4, 4)).toBeCloseTo(0.5);
+  it.each([
+    ["zero energy", 0, 3.2, 0],
+    ["default positive energy", Math.PI / 4, 3.2, 0.4],
+    ["negative energy", -Math.PI / 4, 3.2, 0.6],
+    ["positive wrap", Math.PI / 2, 5, 0.25],
+    ["negative wrap", -Math.PI / 2, 5, 0.75]
+  ])("uses the positive adjoint-unitary convention for %s", (_case, energy, time, expected) => {
+    expect(phaseFromEnergy(energy, time)).toBeCloseTo(expected);
+  });
+
+  it("locks the documented default phase and finite-precision estimate", () => {
+    const phase = phaseFromEnergy(Math.PI / 4, 3.2);
+
+    expect(phase).toBeCloseTo(0.4);
+    expect(nearestEstimate(phase, 4)).toEqual({ index: 6, phase: 0.375, bits: "0110" });
   });
 
   it("wraps positive and negative phases into one turn", () => {

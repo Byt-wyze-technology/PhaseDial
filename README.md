@@ -41,21 +41,35 @@ quantum computer.
 
 Imagine a system with an energy value $E$. If the system starts in an energy
 eigenstate, time evolution does not move it to another energy level. Instead,
-it adds a complex phase:
+standard forward Schrödinger evolution adds a complex phase. PhaseDial uses
+natural units, so $\hbar=1$:
 
 $$
-|E\rangle \longrightarrow e^{-iEt}|E\rangle.
+U_{\mathrm{fwd}}(t)|E\rangle=e^{-iEt}|E\rangle.
 $$
 
-You can picture that phase as the hand of a clock. In PhaseDial, one complete
-turn is written as `1.0`, so the phase after time $t$ is
+PhaseDial deliberately gives its clock the opposite, positive orientation. It
+applies the adjoint unitary
+
+$$
+U_+(t)=U_{\mathrm{fwd}}^\dagger(t)=e^{+iHt},
+$$
+
+so that the standard QPE eigenphase convention
+
+$$
+U|\psi\rangle=e^{2\pi i\phi}|\psi\rangle
+$$
+
+gives the displayed phase
 
 $$
 \phi=\frac{Et}{2\pi}\pmod 1.
 $$
 
-The `mod 1` just means that after one full turn, the hand starts around the dial
-again.
+The dial therefore shows the eigenphase of $U_+$, not the eigenphase of ordinary
+forward evolution $U_{\mathrm{fwd}}$. The `mod 1` means that after one full
+turn, the hand starts around the dial again.
 
 Here is the default example:
 
@@ -107,8 +121,8 @@ different lengths of time.
 
 ### 3. Apply controlled evolution
 
-Each control value $x$ asks the energy state to evolve by a corresponding
-amount:
+Each control value $x$ applies a corresponding power of PhaseDial's selected
+unitary $U_+$:
 
 $$
 |x\rangle|E\rangle
@@ -117,7 +131,9 @@ e^{2\pi i\phi x}|x\rangle|E\rangle.
 $$
 
 The energy state comes back unchanged. The useful information appears in the
-relative phases of the control register. This is **phase kickback**.
+relative phases of the control register. This is **phase kickback**. Using
+$U_+$ here is the deliberate convention that keeps positive energy moving in
+the dial's positive direction.
 
 ![The guided QPE lab at the controlled-evolution step](images/qpe_guided_lab.png)
 
@@ -212,7 +228,7 @@ examples classically.
 
 ## Try it yourself
 
-You need Node.js 20.19 or later and npm 10 or later.
+You need Node.js 24 or later and npm 10 or later.
 
 ```bash
 git clone https://github.com/Byt-wyze-technology/PhaseDial.git
@@ -239,8 +255,9 @@ Run the checks:
 npm run check
 ```
 
-This runs the deterministic numerical suite, builds the production app, and
-runs the Chromium phase-boundary regression. To run the layers separately:
+This audits the complete dependency tree for high- or critical-severity known
+advisories, runs the deterministic numerical suite, builds the production app,
+and runs the Chromium regressions. To run the layers separately:
 
 ```bash
 npm test
@@ -280,6 +297,7 @@ For more detail:
 - [Architecture](docs/ARCHITECTURE.md)
 - [Roadmap](docs/ROADMAP.md)
 - [Testing plan](docs/TESTING_PLAN.md)
+- [Scientific and repository remediation plan](docs/REMEDIATION_PLAN.md)
 - [Changelog](CHANGELOG.md)
 
 ---

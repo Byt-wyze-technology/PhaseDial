@@ -35,6 +35,11 @@ The interface should make phase wrapping, finite precision, and probabilistic
 measurement explicit. It should not imply that a browser animation is quantum
 hardware.
 
+The positive dial is the QPE eigenphase of the deliberately selected adjoint
+unitary $U_+(t)=e^{+iHt}$. Teaching material must distinguish that convention
+from standard forward Schrödinger evolution $U_{\mathrm{fwd}}(t)=e^{-iHt}$ and
+must state the use of natural units with $\hbar=1$.
+
 ### Exploration before assessment
 
 Controls should invite a learner to vary one parameter, form a prediction, and

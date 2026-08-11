@@ -15,6 +15,7 @@ export function phaseDistance(a: number, b: number): number {
   return Math.min(delta, 1 - delta);
 }
 
+/** QPE eigenphase of U₊(t) = exp(+iHt), using natural units with ℏ = 1. */
 export function phaseFromEnergy(energy: number, time: number) {
   return clampPhase((energy * time) / (2 * Math.PI));
 }

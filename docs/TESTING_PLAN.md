@@ -171,3 +171,12 @@ Current assessment:
   ignored test artifacts, and documentation.
 
 Overall verdict: complete. Every criterion is satisfied.
+
+## Follow-up findings
+
+This plan verifies the numerical behavior and browser boundary regression that
+were in its declared scope. It does not establish that the scientific
+energy-to-phase convention, dependency security, Node lifecycle, or GitHub
+repository settings are settled. Those later findings are tracked in
+[`REMEDIATION_PLAN.md`](REMEDIATION_PLAN.md), which is the active plan for that
+work.

@@ -20,7 +20,7 @@ participating, you agree to follow the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 Requirements:
 
-- Node.js 20.19 or later
+- Node.js 24 or later
 - npm 10 or later
 
 Install the exact dependency tree from the lockfile:
@@ -86,13 +86,16 @@ The current implemented model is documented in
 ```bash
 npm test
 npm run test:browser
+npm run audit:dependencies
 npm run check
 ```
 
 `npm test` runs the deterministic Vitest engine suite. `npm run test:browser`
 builds the production app and runs the Chromium phase-boundary regression.
-`npm run check` runs both layers in the same order used by CI. Pull requests
-are expected to pass the complete check.
+`npm run audit:dependencies` fails for known high- or critical-severity npm
+advisories, including development dependencies. `npm run check` runs the audit
+and both test layers in the same order used by CI. Pull requests are expected
+to pass the complete check.
 
 For a visible interface change, refresh the README figures:
 

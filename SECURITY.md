@@ -38,3 +38,18 @@ unofficial forks should use normal support or issue channels.
 
 PhaseDial is a client-side teaching simulator. It currently has no accounts,
 backend, database, secrets, payment flow, or quantum-hardware connection.
+
+## Dependency audit policy
+
+The committed dependency tree, including development dependencies, must have
+no known high- or critical-severity npm advisories. CI enforces this threshold:
+
+```bash
+npm run audit:dependencies
+```
+
+This check is separate from unit, build, and browser verification. A passing
+test suite does not establish that dependencies are free from known advisories,
+and a passing audit does not establish that application behavior is correct.
+Lower-severity findings are reviewed during dependency maintenance but do not
+currently block CI.

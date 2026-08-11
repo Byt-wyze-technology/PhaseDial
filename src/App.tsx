@@ -13,8 +13,8 @@ const stageCopy: Record<Stage, { eyebrow: string; title: string; body: string; e
   prepare: {
     eyebrow: "Start with certainty",
     title: "Prepare one energy eigenstate.",
-    body: "An eigenstate keeps its measurement probabilities under time evolution. Only its complex phase changes—the stable clock signal QPE needs.",
-    equation: "H|E⟩ = E|E⟩"
+    body: "Forward evolution uses e⁻ⁱᴱᵗ. PhaseDial selects its adjoint U₊ = e⁺ⁱᴴᵗ so positive energy turns the dial in the positive direction.",
+    equation: "U_fwd|E⟩ = e⁻ⁱᴱᵗ|E⟩"
   },
   superposition: {
     eyebrow: "Open every clock",
@@ -25,8 +25,8 @@ const stageCopy: Record<Stage, { eyebrow: string; title: string; body: string; e
   kickback: {
     eyebrow: "Hide a frequency in phase",
     title: "Let controlled powers tick.",
-    body: "The target returns unchanged, while each control branch acquires a phase proportional to its time label. This is phase kickback.",
-    equation: "|x⟩|E⟩ → e²πⁱφˣ |x⟩|E⟩"
+    body: "Controlled powers of U₊ leave the target eigenstate unchanged while its positive eigenphase is kicked into the control register.",
+    equation: "U₊|E⟩ = e²πⁱφ|E⟩"
   },
   qft: {
     eyebrow: "Refocus the signal",
@@ -181,7 +181,7 @@ export default function App() {
             <div className="visual-grid">
               <div className="dial-panel">
                 <PhaseDial phase={phase} estimate={estimate.phase} />
-                <div className="phase-readout"><span>φ = Et / 2π</span><b>{phase.toFixed(4)} turns</b></div>
+                <div className="phase-readout"><span>φ₊ = Et / 2π</span><b>{phase.toFixed(4)} turns</b></div>
               </div>
               <div className="register-panel">
                 <div className="panel-title"><span>CONTROL REGISTER</span><small>{2 ** bits} states</small></div>
@@ -216,7 +216,7 @@ export default function App() {
           <div className="measurement"><small>LATEST MEASUREMENT</small><b>{measured.bits}</b><span>decimal {measured.outcome} · {(measured.probability * 100).toFixed(1)}% likelihood</span></div>
         </div>
         <div className="chart-card">
-          <div className="chart-meta"><span>MEASUREMENT PROBABILITY</span><span><i className="legend-target" /> true φ&nbsp;&nbsp; <i className="legend-estimate" /> nearest estimate</span></div>
+          <div className="chart-meta"><span>MEASUREMENT PROBABILITY</span><span><i className="legend-target" /> true φ₊&nbsp;&nbsp; <i className="legend-estimate" /> nearest estimate</span></div>
           <div className="bars">
             {visibleDistribution.map(item => (
               <div className={`bar-wrap ${item.outcome === measured.outcome ? "measured" : ""}`} key={item.outcome}>
@@ -241,7 +241,7 @@ export default function App() {
         <div className="bridge-grid">
           <article><span className="bridge-icon">∿</span><small>CLASSICAL</small><h3>Sample a rotating signal.</h3><p>Observe a complex wave at many times, then use a Fourier transform to reveal its dominant frequency.</p><code>f(t) = eⁱᴱᵗ</code><footer><span>time samples</span><b>FFT → peak</b></footer></article>
           <div className="versus"><span>↔</span><small>SAME<br />DANCE</small></div>
-          <article><span className="bridge-icon quantum">ψ</span><small>QUANTUM</small><h3>Interfere evolution histories.</h3><p>Query controlled powers in superposition, then use an inverse QFT to focus probability on the phase.</p><code>U|E⟩ = e²πⁱφ|E⟩</code><footer><span>controlled powers</span><b>QFT⁻¹ → bits</b></footer></article>
+          <article><span className="bridge-icon quantum">ψ</span><small>QUANTUM</small><h3>Interfere evolution histories.</h3><p>Query controlled powers of the selected adjoint U₊ in superposition, then use an inverse QFT to focus probability on its positive eigenphase.</p><code>U₊|E⟩ = e²πⁱφ|E⟩</code><footer><span>controlled powers</span><b>QFT⁻¹ → bits</b></footer></article>
         </div>
         <p className="bridge-boundary">The analogy explains the signal structure—not a classical speed-up. Quantum advantage only matters when the underlying system no longer fits in classical memory.</p>
       </section>

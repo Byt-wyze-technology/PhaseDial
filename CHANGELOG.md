@@ -22,6 +22,15 @@ tagged releases.
 
 ### Changed
 
+- Moved local setup and CI to Node.js 24 and updated the checkout and setup-node
+  Actions to their Node 24-compatible major versions.
+- Added a reproducible CI dependency gate for high- and critical-severity npm
+  advisories, including development dependencies.
+- Defined the positive phase dial as the QPE eigenphase of
+  `U₊(t) = exp(+iHt)`, distinguished it from forward evolution
+  `U_fwd(t) = exp(-iHt)`, and declared the `ℏ = 1` unit convention.
+- Replaced the sign-blind half-turn conversion test with convention-sensitive
+  positive- and negative-energy cases.
 - Corrected displayed estimate error to use circular phase distance at the
   zero-one boundary.
 - Replaced state-vector and exact-simulation UI claims with analytical

@@ -12,18 +12,51 @@ It is descriptive, not a promise that unimplemented quantum operations exist.
 - Register size: $N=2^n$.
 - Measurement outcome: $m\in\{0,\ldots,N-1\}$.
 
-## Phase from energy
+## Sign and unit convention
 
-An energy eigenstate evolves as
+PhaseDial uses natural units with $\hbar=1$, so $Et$ is dimensionless. Standard
+forward Schrödinger evolution is
 
 $$
-e^{-iEt}|E\rangle.
+U_{\mathrm{fwd}}(t)=e^{-iHt}
 $$
 
-PhaseDial represents the corresponding phase in turns:
+and therefore
+
+$$
+U_{\mathrm{fwd}}(t)|E\rangle=e^{-iEt}|E\rangle.
+$$
+
+PhaseDial deliberately uses the adjoint, positive-orientation unitary
+
+$$
+U_+(t)=U_{\mathrm{fwd}}^\dagger(t)=e^{+iHt}.
+$$
+
+Under the QPE convention
+
+$$
+U|\psi\rangle=e^{2\pi i\phi}|\psi\rangle,
+$$
+
+the eigenphase of $U_+$ is
 
 $$
 \phi=\frac{Et}{2\pi}\pmod 1.
+$$
+
+This positive value is the phase displayed and estimated by PhaseDial. It is
+not the eigenphase of $U_{\mathrm{fwd}}$, which would be
+$-Et/(2\pi)\pmod 1$.
+
+## Phase from energy
+
+`phaseFromEnergy` implements the selected $U_+$ convention:
+
+$$
+\operatorname{phaseFromEnergy}(E,t)
+=
+\frac{Et}{2\pi}\pmod 1.
 $$
 
 `clampPhase` maps any finite phase to the half-open interval $[0,1)$.
@@ -87,6 +120,9 @@ $$
 When $\phi=m/N$, the expression has a removable singularity. The engine
 returns $P(m)=1$ directly.
 
+Here and throughout the distribution calculation, $\phi$ is the eigenphase of
+$U_+$ selected above.
+
 ## Sampling
 
 `seededMeasure` selects one outcome from the calculated distribution using a
@@ -110,6 +146,10 @@ concentration, finite and bounded probabilities, normalization across every UI
 ancilla size, valid outcome metadata, and reproducible seeded sampling. A
 Chromium regression also verifies the rendered estimate and error across the
 zero-one boundary.
+
+The default conversion test uses $E=\pi/4$ and $t=3.2$, which gives
+$\phi=0.4$ under the $U_+$ convention. This non-half-turn case is intentionally
+sign-sensitive: the forward-evolution eigenphase would instead be $0.6$.
 
 ## Pedagogical versus calculated views
 
@@ -141,3 +181,10 @@ The engine does not currently implement:
 
 Contributions that add these features should declare their types and add
 invariant tests before the documentation describes them as active behavior.
+
+## Convention references
+
+- [IBM Quantum: the phase-estimation problem](https://quantum.cloud.ibm.com/learning/en/courses/fundamentals-of-quantum-algorithms/phase-estimation-and-factoring/phase-estimation-problem)
+  defines QPE through $U|\psi\rangle=e^{2\pi i\phi}|\psi\rangle$.
+- [IBM Quantum: time evolution](https://quantum.cloud.ibm.com/learning/courses/quantum-diagonalization-algorithms/krylov)
+  uses standard forward evolution $e^{-iHt}$ in natural units.
