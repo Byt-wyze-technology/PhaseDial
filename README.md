@@ -297,7 +297,6 @@ For more detail:
 - [Architecture](docs/ARCHITECTURE.md)
 - [Roadmap](docs/ROADMAP.md)
 - [Testing plan](docs/TESTING_PLAN.md)
-- [Scientific and repository remediation plan](docs/REMEDIATION_PLAN.md)
 - [Changelog](CHANGELOG.md)
 
 ---
