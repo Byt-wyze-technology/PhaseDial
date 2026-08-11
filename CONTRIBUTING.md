@@ -27,6 +27,7 @@ Install the exact dependency tree from the lockfile:
 
 ```bash
 npm ci
+npx playwright install chromium
 ```
 
 Start the development server:
@@ -84,17 +85,18 @@ The current implemented model is documented in
 
 ```bash
 npm test
-npm run build
+npm run test:browser
+npm run check
 ```
 
-The first command runs the Vitest engine suite. The second runs strict
-TypeScript checks and produces the Vite build. Pull requests are expected to
-pass both.
+`npm test` runs the deterministic Vitest engine suite. `npm run test:browser`
+builds the production app and runs the Chromium phase-boundary regression.
+`npm run check` runs both layers in the same order used by CI. Pull requests
+are expected to pass the complete check.
 
 For a visible interface change, refresh the README figures:
 
 ```bash
-npx playwright install chromium
 npm run screenshots
 ```
 

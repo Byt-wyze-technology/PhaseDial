@@ -86,15 +86,17 @@ TypeScript runs in strict mode. Vitest runs the engine tests, and Playwright
 runs the circular phase-boundary workflow against the production preview.
 
 ```bash
+npx playwright install chromium
 npm test
 npm run test:browser
 npm run check
 ```
 
-`npm run test:browser` builds the app before starting the preview. `npm run
-check` runs the unit suite followed by the production build and browser test.
-GitHub Actions installs Chromium and executes both layers using the lockfile and
-Node version in `.nvmrc`.
+The Playwright browser binary is installed separately from `npm ci`. `npm run
+test:browser` builds the app before starting the preview. `npm run check` runs
+the unit suite followed by the production build and browser test. GitHub
+Actions installs Chromium and executes both layers using the lockfile and Node
+version in `.nvmrc`.
 
 README screenshots are reproducible browser artifacts. `npm run screenshots`
 builds the app, starts Vite's production preview, captures three Chromium

@@ -218,6 +218,7 @@ You need Node.js 20.19 or later and npm 10 or later.
 git clone https://github.com/Byt-wyze-technology/PhaseDial.git
 cd PhaseDial
 npm ci
+npx playwright install chromium
 npm run dev
 ```
 
@@ -278,6 +279,7 @@ For more detail:
 - [Mathematical model](docs/MATHEMATICAL_MODEL.md)
 - [Architecture](docs/ARCHITECTURE.md)
 - [Roadmap](docs/ROADMAP.md)
+- [Testing plan](docs/TESTING_PLAN.md)
 - [Changelog](CHANGELOG.md)
 
 ---

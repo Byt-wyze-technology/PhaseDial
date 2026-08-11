@@ -1,6 +1,6 @@
 # Testing Plan
 
-Implementation status: complete and verified.
+Implementation status: complete and verified locally and in GitHub Actions.
 
 This plan defines the next verification increment for PhaseDial. It covers the
 implemented analytical QPE engine and one high-value browser workflow. It does
@@ -135,7 +135,8 @@ After implementation, update only claims affected by the new coverage:
 
 Status: complete. All commands passed on 2026-08-11.
 
-Run, in order:
+Install the local Chromium binary once with `npx playwright install chromium`,
+then run, in order:
 
 1. `npm test`
 2. `npm run build`
@@ -148,11 +149,25 @@ reports, and browser traces are not accidentally committed.
 
 ## Completion criteria
 
-The work is complete when:
+Current assessment:
 
-- all declared engine invariants above have deterministic automated coverage;
-- the zero-one boundary is verified through the rendered UI;
-- all verification commands pass locally;
-- CI runs both unit and browser tests;
-- documentation matches the implemented commands and coverage;
-- no unrelated dependencies or product behavior have changed.
+- [x] All declared engine invariants above have deterministic automated
+  coverage. Evidence: `npm test` passes 35 tests in `src/engine.test.ts` across
+  ancilla counts two through eight.
+- [x] The zero-one boundary is verified through the rendered UI. Evidence:
+  `tests/phase-boundary.pw.ts` passes in Chromium against the production
+  preview and checks phase `0.99`, estimate `0.00`, and error `0.01`.
+- [x] All verification commands pass locally. Evidence: `npm test`, `npm run
+  build`, `npm run test:browser`, `npm run check`, and `git diff --check` passed
+  on 2026-08-11.
+- [x] CI runs both unit and browser tests. Evidence: GitHub Actions run
+  `31505389010` completed successfully for commit `c64e8e8`.
+- [x] Documentation matches the implemented commands and coverage. Evidence:
+  the README, architecture, mathematical model, roadmap, and changelog were
+  checked against `package.json`, the tests, and the CI workflow.
+- [x] No unrelated dependencies or product behavior have changed. Evidence:
+  `package.json` changes only npm scripts, `package-lock.json` is unchanged,
+  and the implementation diff is limited to tests, test configuration, CI,
+  ignored test artifacts, and documentation.
+
+Overall verdict: complete. Every criterion is satisfied.
