@@ -1,7 +1,8 @@
 # Scientific and Repository Remediation Plan
 
-Status: active. Work packages 1 and 2 are complete. The local dependency fix in
-work package 3 is verified; its Dependabot PR disposition remains pending.
+Status: active. Work package 2 has an approved preset-button regression still
+to implement. Work package 8 awaits hosted CI verification for the final
+revision after the local lockfile metadata correction is published.
 
 This document is the authoritative ledger for issues discovered after the
 numerical testing increment was completed. It replaces chat summaries as the
@@ -40,9 +41,9 @@ because a workflow is green. Its acceptance evidence must also be recorded.
 | SEC-1 | `nanoid@3.3.16` is affected by `GHSA-2v37-7h3g-55p8`. | High advisory; low observed application exposure | complete locally: patched to 3.3.18 and audited |
 | SEC-2 | CI reports the vulnerability but has no explicit audit policy or disposition step. | Medium assurance gap | complete locally: policy, command, and CI gate agree |
 | SEC-3 | Dependabot vulnerability alerts/security updates are reported disabled while version updates are enabled. | Medium repository security | complete: owner enabled graph, alerts, and security updates |
-| CI-1 | `actions/setup-node@v4` targets deprecated Node 20 and is forced onto Node 24. | High maintenance | local update verified; hosted CI pending |
+| CI-1 | `actions/setup-node@v4` targets deprecated Node 20 and is forced onto Node 24. | High maintenance | complete: published CI passed without the old warning |
 | CI-2 | The project itself installs EOL Node 20 through `.nvmrc` and permits it in `package.json`. | High runtime maintenance | complete locally: Node 24 required and verified |
-| DEP-1 | Three Dependabot PRs require refresh, review, testing, and explicit disposition. | Medium maintenance | dispositions selected; GitHub closure/verification pending |
+| DEP-1 | Three Dependabot PRs require refresh, review, testing, and explicit disposition. | Medium maintenance | complete: all three dispositions verified |
 | GOV-1 | `main` has no branch protection or ruleset. | Optional hardening | complete: owner created basic `main` ruleset |
 
 ## Work package 1: settle the scientific convention
@@ -115,7 +116,8 @@ Verification evidence:
 
 ## Work package 2: add convention-sensitive tests
 
-Status: complete. Verified locally on 2026-08-11.
+Status: in progress. The original convention-sensitive coverage is complete;
+the approved regression for all three preset buttons remains to implement.
 
 1. Replace or supplement the half-turn energy conversion case with a
    sign-discriminating case such as magnitude `0.4`, whose opposite convention
@@ -128,27 +130,37 @@ Status: complete. Verified locally on 2026-08-11.
    boundary tests unless the selected convention requires updated expectations.
 5. Ensure expected values come from the recorded scientific contract rather
    than duplicating the implementation formula without justification.
+6. Exercise all three preset buttons through the rendered UI and verify that
+   each loads the expected values and displays the phase required by the
+   selected positive convention.
 
 ### Acceptance criteria
 
 - A deliberate sign reversal causes at least one test to fail.
 - The default example is protected in both engine and rendered-UI coverage.
 - Tests state which convention they enforce.
+- All three user-facing preset buttons are protected against UI-wiring and
+  displayed-phase regressions.
 - Existing numerical invariants continue to pass.
 
 Verification evidence:
 
 - 40 unit tests pass, including table-driven zero, positive, negative, and
   wrapping cases plus the documented default phase and four-bit estimate;
-- 2 Chromium tests pass, including the rendered default value and positive
-  convention label;
+- 2 Chromium tests pass, including the rendered default value, the positive
+  convention label, and the circular boundary case;
 - the production build passes;
 - refreshed screenshots were inspected for the changed convention text.
 
+Outstanding work:
+
+- add and run the approved rendered regression covering all three preset
+  buttons.
+
 ## Work package 3: resolve the dependency advisory
 
-Status: local lockfile update and verification complete. The grouped Dependabot
-PR still requires an explicit disposition.
+Status: complete. Local lockfile verification and the grouped Dependabot PR
+disposition are verified.
 
 Current evidence:
 
@@ -186,21 +198,22 @@ Local verification evidence from 2026-08-11:
 - both `npm audit` and `npm audit --omit=dev` report zero vulnerabilities;
 - the only dependency diff is Nano ID 3.3.16 to 3.3.18.
 
-Outstanding external action: record the grouped Dependabot PR disposition.
-
 Recorded PR dispositions:
 
 - PR #1 (`actions/checkout@v7`): replace with the reviewed local workflow
-  update; close after the final change is published;
+  update; closed;
 - PR #2 (`actions/setup-node@v7`): replace with the reviewed local workflow
-  update; close after the final change is published;
+  update; closed;
 - PR #3 (grouped development dependencies): do not merge into this remediation
-  change; close and allow a fresh dependency update after remediation closure.
+  change; closed without merging on 2026-08-11 so a fresh update can be
+  proposed after remediation closure.
+
+GitHub verification found zero remaining open dependency-bump PRs.
 
 ## Work package 4: modernize Node and GitHub Actions
 
-Status: local Node 24 verification complete. Hosted CI log inspection and
-action-PR dispositions remain pending.
+Status: complete. Node 24, updated Actions, action-PR dispositions, and the
+published hosted workflow were verified on 2026-08-11.
 
 1. Select a supported Node LTS line, with Node 24 as the initial candidate.
 2. Update `.nvmrc`, `package.json` engines, and every setup document together.
@@ -224,11 +237,15 @@ Local verification evidence from 2026-08-11:
 - CI uses `actions/checkout@v7` and `actions/setup-node@v7`;
 - a clean install and `npm run check` pass under Node 24.19.0;
 - 40 unit tests, the production build, and 2 Chromium tests pass;
-- hosted CI log inspection and PR dispositions remain outstanding.
+- PRs #1 and #2 are independently confirmed closed without merging;
+- GitHub Actions run `31521596235` completed successfully;
+- inspection of that run confirmed that the old forced Node-runtime warning is
+  absent.
 
 ## Work package 5: define dependency-security policy
 
-Status: complete locally. Hosted CI confirmation is part of final verification.
+Status: complete. Local policy verification and the published hosted workflow
+agree.
 
 1. Decide whether full `npm audit` is a blocking CI gate, a reporting step, or
    a scheduled/manual review.
@@ -286,6 +303,11 @@ Authenticated evidence from 2026-08-11:
 - the repository owner confirmed creation of the basic `main` ruleset after
   enabling dependency graph, alerts, and security updates.
 
+Recorded ruleset decision: protect `main` from deletion and force-pushing while
+intentionally allowing direct maintainer pushes. Requiring pull requests or a
+passing CI status check before updating `main` is not part of the selected
+ruleset.
+
 ## Work package 7: reconcile documentation and evidence
 
 Status: complete locally. Final hosted evidence remains in work package 8.
@@ -317,12 +339,16 @@ Reconciliation evidence from 2026-08-11:
 - stale Node, Actions, convention, and verification-command searches return
   only historical finding descriptions in this plan;
 - the README now describes the dependency audit performed by `npm run check`;
+- the root records in `package.json` and `package-lock.json` both require Node
+  24; third-party engine ranges remain unchanged;
 - the roadmap retains only deferred future scope; no completed remediation item
   required removal.
 
 ## Work package 8: final verification and closure
 
-Status: local verification complete. Hosted CI and PR cleanup remain pending.
+Status: in progress. The published CI run passed without the old Node warning.
+The approved preset regression, final local verification, and hosted CI for the
+revision containing the lockfile metadata correction remain outstanding.
 
 Run and record:
 
@@ -345,12 +371,13 @@ This remediation cycle is complete only when:
 - [x] convention-sensitive engine and UI tests pass;
 - [x] the high-severity dependency advisory is fixed or formally dispositioned;
 - [x] the project uses a supported Node release;
-- [ ] GitHub Actions no longer emits the identified Node-runtime warning;
+- [x] GitHub Actions no longer emits the identified Node-runtime warning;
 - [x] dependency-audit behavior is explicit and reproducible;
 - [x] Dependabot and branch-protection decisions are recorded and verified;
-- [x] all affected documentation is synchronized;
+- [x] all affected documentation and manifest metadata are synchronized;
 - [ ] local verification and hosted CI pass without unreviewed warnings;
-- [ ] every open Dependabot PR has a recorded disposition.
+- [x] every open Dependabot PR has a recorded disposition.
+- [ ] all three preset buttons pass the approved rendered regression;
 
 No overall `complete` verdict may be recorded while any required checkbox is
 open.
@@ -363,7 +390,10 @@ Local verification evidence from 2026-08-11:
 - `npm audit --omit=dev` reported zero production vulnerabilities;
 - documentation consistency searches and `git diff --check` passed;
 - the complete working-tree diff and changed screenshots were reviewed;
-- hosted CI inspection and the recorded PR closures remain outstanding.
+- GitHub Actions run `31521596235` passed and did not emit the old forced
+  Node-runtime warning;
+- that hosted run predates the local root lockfile engine correction, so hosted
+  CI for the exact final revision remains outstanding.
 
 ## Captured but deferred scope
 
