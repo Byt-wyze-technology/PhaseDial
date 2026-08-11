@@ -14,6 +14,23 @@ test("renders the default positive adjoint-unitary phase", async ({ page }) => {
   await expect(precisionValues.nth(2)).toHaveText("0.025000");
 });
 
+test("renders the positive-convention phase for every system preset", async ({ page }) => {
+  await page.goto("/");
+
+  const system = page.getByRole("combobox");
+  const cases = [
+    { name: "Two-level atom", energy: "E = 0.785", phase: "0.4000 turns" },
+    { name: "Spin in a field", energy: "E = 1.930", phase: "0.9829 turns" },
+    { name: "Molecular modes", energy: "E = 2.410", phase: "0.2274 turns" },
+  ];
+
+  for (const preset of cases) {
+    await system.selectOption({ label: preset.name });
+    await expect(page.locator(".energy b")).toHaveText(preset.energy);
+    await expect(page.locator(".phase-readout b")).toHaveText(preset.phase);
+  }
+});
+
 test("reports circular phase error when the estimate wraps to zero", async ({ page }) => {
   await page.goto("/");
 

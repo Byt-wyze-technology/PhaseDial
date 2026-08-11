@@ -1,8 +1,8 @@
 # Scientific and Repository Remediation Plan
 
-Status: active. Work package 2 has an approved preset-button regression still
-to implement. Work package 8 awaits hosted CI verification for the final
-revision after the local lockfile metadata correction is published.
+Status: active. Work packages 1 through 7 are complete locally. Work package 8
+awaits hosted CI verification for the final revision containing the lockfile
+metadata correction and preset regression.
 
 This document is the authoritative ledger for issues discovered after the
 numerical testing increment was completed. It replaces chat summaries as the
@@ -116,8 +116,8 @@ Verification evidence:
 
 ## Work package 2: add convention-sensitive tests
 
-Status: in progress. The original convention-sensitive coverage is complete;
-the approved regression for all three preset buttons remains to implement.
+Status: complete. Verified locally on 2026-08-11, including the approved
+regression for all three system presets.
 
 1. Replace or supplement the half-turn energy conversion case with a
    sign-discriminating case such as magnitude `0.4`, whose opposite convention
@@ -130,7 +130,7 @@ the approved regression for all three preset buttons remains to implement.
    boundary tests unless the selected convention requires updated expectations.
 5. Ensure expected values come from the recorded scientific contract rather
    than duplicating the implementation formula without justification.
-6. Exercise all three preset buttons through the rendered UI and verify that
+6. Exercise all three preset options through the rendered UI and verify that
    each loads the expected values and displays the phase required by the
    selected positive convention.
 
@@ -139,7 +139,7 @@ the approved regression for all three preset buttons remains to implement.
 - A deliberate sign reversal causes at least one test to fail.
 - The default example is protected in both engine and rendered-UI coverage.
 - Tests state which convention they enforce.
-- All three user-facing preset buttons are protected against UI-wiring and
+- All three user-facing preset options are protected against UI-wiring and
   displayed-phase regressions.
 - Existing numerical invariants continue to pass.
 
@@ -147,15 +147,10 @@ Verification evidence:
 
 - 40 unit tests pass, including table-driven zero, positive, negative, and
   wrapping cases plus the documented default phase and four-bit estimate;
-- 2 Chromium tests pass, including the rendered default value, the positive
-  convention label, and the circular boundary case;
+- 3 Chromium tests pass, including the rendered default value, all three system
+  presets, the positive convention label, and the circular boundary case;
 - the production build passes;
 - refreshed screenshots were inspected for the changed convention text.
-
-Outstanding work:
-
-- add and run the approved rendered regression covering all three preset
-  buttons.
 
 ## Work package 3: resolve the dependency advisory
 
@@ -194,7 +189,7 @@ Implementation sequence:
 Local verification evidence from 2026-08-11:
 
 - `npm ci` installs Nano ID 3.3.18 from the lockfile;
-- 40 unit tests, the production build, and 2 Chromium tests pass;
+- 40 unit tests, the production build, and 3 Chromium tests pass;
 - both `npm audit` and `npm audit --omit=dev` report zero vulnerabilities;
 - the only dependency diff is Nano ID 3.3.16 to 3.3.18.
 
@@ -236,7 +231,7 @@ Local verification evidence from 2026-08-11:
 - `.nvmrc`, package engines, README, and contributing guidance select Node 24;
 - CI uses `actions/checkout@v7` and `actions/setup-node@v7`;
 - a clean install and `npm run check` pass under Node 24.19.0;
-- 40 unit tests, the production build, and 2 Chromium tests pass;
+- 40 unit tests, the production build, and 3 Chromium tests pass;
 - PRs #1 and #2 are independently confirmed closed without merging;
 - GitHub Actions run `31521596235` completed successfully;
 - inspection of that run confirmed that the old forced Node-runtime warning is
@@ -346,9 +341,9 @@ Reconciliation evidence from 2026-08-11:
 
 ## Work package 8: final verification and closure
 
-Status: in progress. The published CI run passed without the old Node warning.
-The approved preset regression, final local verification, and hosted CI for the
-revision containing the lockfile metadata correction remain outstanding.
+Status: local verification complete. The published CI run passed without the
+old Node warning. Hosted CI for the revision containing the lockfile metadata
+correction and preset regression remains outstanding.
 
 Run and record:
 
@@ -377,7 +372,7 @@ This remediation cycle is complete only when:
 - [x] all affected documentation and manifest metadata are synchronized;
 - [ ] local verification and hosted CI pass without unreviewed warnings;
 - [x] every open Dependabot PR has a recorded disposition.
-- [ ] all three preset buttons pass the approved rendered regression;
+- [x] all three system presets pass the approved rendered regression;
 
 No overall `complete` verdict may be recorded while any required checkbox is
 open.
@@ -386,7 +381,7 @@ Local verification evidence from 2026-08-11:
 
 - clean installation succeeded under Node 24.19.0 with Nano ID 3.3.18;
 - `npm run check` passed: zero high/critical audit findings, 40 unit tests,
-  production build, and 2 Chromium tests;
+  production build, and 3 Chromium tests;
 - `npm audit --omit=dev` reported zero production vulnerabilities;
 - documentation consistency searches and `git diff --check` passed;
 - the complete working-tree diff and changed screenshots were reviewed;
