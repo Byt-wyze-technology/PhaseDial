@@ -296,7 +296,6 @@ For more detail:
 - [Mathematical model](docs/MATHEMATICAL_MODEL.md)
 - [Architecture](docs/ARCHITECTURE.md)
 - [Roadmap](docs/ROADMAP.md)
-- [Testing plan](docs/TESTING_PLAN.md)
 - [Changelog](CHANGELOG.md)
 
 ---
