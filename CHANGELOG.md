@@ -8,8 +8,26 @@ tagged releases.
 
 ## [Unreleased]
 
+Nothing yet.
+
+## [1.0.0] - 2026-08-14
+
+First tagged release. PhaseDial was developed in the open before this point but
+was never published under a version, so this entry consolidates the whole of
+that work.
+
 ### Added
 
+- Interactive energy-to-phase dial.
+- Three pedagogical system presets.
+- Adjustable evolution time and two-to-eight-bit ancilla precision.
+- Five-stage quantum phase-estimation learning flow.
+- Ideal finite-register QPE probability chart and sampled measurement readout.
+- Classical-frequency and quantum-phase-estimation comparison.
+- Responsive interface and reduced-motion support.
+- Mathematical engine tests for phase conversion, phase wrapping, finite
+  precision, exact-grid behavior, probability normalization, and sampled
+  outcome bounds.
 - MIT license and open-source community-health files.
 - Contribution, security, support, and governance guidance.
 - GitHub issue forms, pull request template, CI, and Dependabot configuration.
@@ -41,17 +59,5 @@ tagged releases.
 - README rewritten as a plain-English, screenshot-led learning guide.
 - CI and local checks extended to build the app and run the browser regression.
 
-## [1.0.0] - 2026-07-25
-
-### Added
-
-- Interactive energy-to-phase dial.
-- Three pedagogical system presets.
-- Adjustable evolution time and two-to-eight-bit ancilla precision.
-- Five-stage quantum phase-estimation learning flow.
-- Ideal finite-register QPE probability chart and sampled measurement readout.
-- Classical-frequency and quantum-phase-estimation comparison.
-- Responsive interface and reduced-motion support.
-- Mathematical engine tests for phase conversion, phase wrapping, finite
-  precision, exact-grid behavior, probability normalization, and sampled
-  outcome bounds.
+[unreleased]: https://github.com/Byt-wyze-technology/PhaseDial/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/Byt-wyze-technology/PhaseDial/releases/tag/v1.0.0
