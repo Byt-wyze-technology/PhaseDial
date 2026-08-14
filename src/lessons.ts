@@ -1,9 +1,10 @@
 /**
  * Lesson content for the Learn section.
  *
- * Every figure quoted in `observe` is produced by the engine in `engine.ts` at
- * the state described by `setup`, so a lesson cannot drift from the simulator
- * without the numbers visibly disagreeing. Adding a lesson requires no React.
+ * Written for someone meeting quantum phase estimation for the first time. Plain
+ * words first, technical names introduced only once there is something to attach
+ * them to. Figures quoted here are ones the simulator produces at the state in
+ * `setup`, so a lesson and the lab cannot quietly disagree.
  */
 
 export type LessonSetup = {
@@ -18,7 +19,7 @@ export type LessonSetup = {
 export type Lesson = {
   title: string;
   body: string;
-  /** What to watch once the setup is applied. Quotes real engine output. */
+  /** What to watch once the setup is applied. */
   observe: string;
   action: string;
   setup: LessonSetup;
@@ -28,114 +29,121 @@ export const lessons: Lesson[] = [
   {
     title: "The simulation problem",
     body:
-      "Chemistry is mostly a question about energy: what are a molecule's allowed energy levels? " +
-      "For anything larger than a few atoms that question is out of reach classically, because the " +
-      "state you would have to write down grows exponentially with the number of particles. Quantum " +
-      "phase estimation takes a different route. It does not compute the energy. It measures it.",
+      "Why bother with any of this? Chemistry comes down to one question more than any other: " +
+      "what energies can a molecule have? For anything bigger than a few atoms, an ordinary " +
+      "computer cannot work that out. The sums grow out of hand far too quickly. Quantum phase " +
+      "estimation gets to the answer a different way. It does not calculate the energy. It measures it.",
     observe:
-      "The four-level preset stands in for a molecule. Each level is an energy that QPE could read, one at a time.",
+      "The four-level system stands in for a molecule. Each line in the spectrum is an energy this method could read, one at a time.",
     action: "Load the four-level system",
     setup: { systemIndex: 2, stageIndex: 0 }
   },
   {
     title: "Energy eigenstates",
     body:
-      "An energy eigenstate is a state with one definite energy. Left alone it never changes shape — " +
-      "the only thing that moves is its phase, which turns at a steady rate. That is what makes it " +
-      "readable. A state with one energy is a clock with one rate.",
+      "Some states have one clean energy and nothing else mixed in. Leave one alone and it does not " +
+      "turn into anything else. The only thing that moves is its phase, which turns steadily, like " +
+      "the hand of a clock. One energy gives you one clock, turning at one speed. That is what makes " +
+      "it readable at all. The formal name for a state like this is an energy eigenstate.",
     observe:
-      "At the prepare stage the dial is a single hand turning at a single rate, because the state holds a single energy.",
-    action: "Prepare an eigenstate",
+      "At the first step the dial shows a single hand turning at a single speed, because the state holds a single energy.",
+    action: "Show me one clean energy",
     setup: { systemIndex: 0, stageIndex: 0 }
   },
   {
     title: "Time evolution as rotation",
     body:
-      "Let the state evolve for a time t and its phase advances by φ = Et / 2π turns. Energy sets the " +
-      "speed of the hand, time sets how long it turns. Nothing else is happening — this is the entire " +
-      "physical content of the first stage.",
+      "How fast does the hand turn? The energy decides that. How far has it got? That depends on how " +
+      "long you leave it running. More energy means a faster clock. More time means further round the " +
+      "dial. That is the whole of what happens at this stage — nothing else is going on.",
     observe:
-      "E = 0.785 for t = 3.2 gives φ = 0.400 turns. Double the time to 6.4 and the phase doubles to 0.800. Press play to watch it sweep.",
-    action: "Set E = 0.785, t = 3.2",
+      "Left running for 3.2 seconds, the hand reaches 0.4 of a turn. Leave it twice as long and it gets twice as far. Press play to watch it go round.",
+    action: "Set it running",
     setup: { systemIndex: 0, time: 3.2, stageIndex: 0 }
   },
   {
     title: "The phase as information",
     body:
-      "The energy is now hidden inside an angle. If you know how far the hand has turned and how long " +
-      "it turned for, you can recover the energy that drove it. Everything after this point exists for " +
-      "one purpose: to read that angle.",
+      "Here is why that matters. The energy is now written down as an angle. If you can see how far " +
+      "the hand has moved, and you know how long it was moving for, you can work backwards to the " +
+      "energy that drove it. Everything the algorithm does from this point on has one job: read that angle.",
     observe:
-      "Change the system and the angle changes with the energy. E = 1.930 gives 0.983 turns; E = 2.410 gives 0.227 turns.",
-    action: "Switch to a different energy",
+      "Switch between the systems. Each one holds a different energy, so each one leaves the hand pointing somewhere different.",
+    action: "Try a different energy",
     setup: { systemIndex: 1, stageIndex: 0 }
   },
   {
     title: "Classical frequency estimation",
     body:
-      "You already know how to solve this classically. Sample a rotating signal at many different times, " +
-      "run a Fourier transform over the samples, and read off the dominant frequency. Quantum phase " +
-      "estimation is the same idea with a different way of collecting the samples.",
+      "You already know how to do this in ordinary life. If something is spinning and you want to know " +
+      "how fast, you look at it at a few different moments and work it out from what you saw. Quantum " +
+      "phase estimation is the same idea. The only real difference is how it manages to get a look.",
     observe:
-      "The bridge section places both methods side by side. The structure is shared; only the sampling differs.",
-    action: "Compare the two methods",
+      "The bridge section puts the everyday version and the quantum version next to each other.",
+    action: "Compare the two",
     setup: { scrollTo: "bridge" }
   },
   {
     title: "Controlled evolution",
     body:
-      "Instead of one long evolution, QPE runs many lengths at once. Each ancilla qubit controls a " +
-      "different number of applications: the first sees the evolution once, the second twice, the third " +
-      "four times, doubling all the way up. Together they measure the same angle at many magnifications.",
+      "Rather than watch one clock for a long time, the algorithm watches several at once. It brings in " +
+      "a handful of spare qubits to do the watching — the control panel calls them ancillas, which is " +
+      "just the technical word for a helper qubit. The first helper watches for one tick, the second " +
+      "for two, the third for four, doubling all the way along. Every helper sees the same angle, but " +
+      "at a different magnification.",
     observe:
-      "At φ = 0.400 the ancillas turn by 0.40, 0.80, 1.60 and 3.20 turns. Each is the same phase multiplied by a power of two.",
-    action: "Show controlled powers",
+      "Each helper ends up further round the dial than the one before, doubling every time. Same angle, bigger magnification.",
+    action: "Show the helper qubits",
     setup: { systemIndex: 0, bits: 4, stageIndex: 2 }
   },
   {
     title: "Phase kickback",
     body:
-      "Here is the trick the algorithm turns on. The controlled operation is meant to act on the target, " +
-      "but the target is an eigenstate, so it comes back unchanged apart from a phase. That phase has " +
-      "nowhere to go except onto the control qubit that triggered it. The register you were going to " +
-      "measure anyway is where the answer lands.",
+      "This is the trick the whole thing turns on, and it is a little sneaky. The operation is meant to " +
+      "act on the state you care about. But that state has one clean energy, so it comes back exactly " +
+      "as it was, apart from the angle it picked up along the way. That angle has nowhere to go, so it " +
+      "lands on the helper qubit that set the operation off instead. The answer ends up sitting on the " +
+      "qubits you were going to look at anyway.",
     observe:
-      "At the kickback stage the target holds still while the ancillas pick up the rotation.",
+      "Watch this step. The state you care about holds still, and the helpers pick up the turning.",
     action: "Watch the kickback",
     setup: { systemIndex: 0, stageIndex: 2 }
   },
   {
     title: "The quantum Fourier transform",
     body:
-      "The ancillas now hold the phase smeared across many qubits as a pattern of rotations. The inverse " +
-      "quantum Fourier transform makes those rotations interfere with each other. They cancel almost " +
-      "everywhere and reinforce at one place: the binary number closest to the phase.",
+      "The angle is now spread thinly across all the helpers, which is no use to anybody as it stands. " +
+      "This step makes them interfere with one another, the way ripples do when they meet on water. " +
+      "Almost everywhere they cancel each other out. In one place they add up. That place is your answer.",
     observe:
-      "After the inverse QFT the probability chart shows one tall bar with small ones either side. That shape is the interference.",
-    action: "Run the inverse QFT",
+      "After this step the chart shows one tall bar with smaller ones either side. The tall bar is where everything added up.",
+    action: "Make them interfere",
     setup: { systemIndex: 0, stageIndex: 3 }
   },
   {
     title: "The full QPE circuit",
     body:
-      "That is the whole algorithm. Prepare an eigenstate, put the ancillas into superposition, kick the " +
-      "phase back onto them with controlled evolution, undo the Fourier pattern, and measure. Five " +
-      "stages with one purpose — turning a hidden angle into a number you can read off.",
+      "That is the whole algorithm. Start with a state that has one clean energy. Bring in your helper " +
+      "qubits. Let the angle land on them. Make them interfere so the answer stands out from everything " +
+      "else. Look at the result. Five steps with a single purpose — turning an angle nobody can see " +
+      "into a number anybody can read.",
     observe:
-      "Step through all five stages with Next operation and watch the same quantum state carried from one to the next.",
-    action: "Start from stage one",
+      "Step through all five with Next operation and watch the same state carried from one to the next.",
+    action: "Start from the beginning",
     setup: { systemIndex: 0, stageIndex: 0 }
   },
   {
     title: "Precision and scale",
     body:
-      "n ancilla qubits divide the dial into 2ⁿ positions, so the answer you get is the nearest grid " +
-      "point rather than the exact phase. More qubits means a finer grid. But a phase that falls between " +
-      "two grid points spreads its probability across both, so a finer ruler can give you a less certain " +
-      "single reading — precision and confidence are not the same thing.",
+      "There is a catch. Your helpers can only give back so many possible answers — three of them give " +
+      "you eight, four give you sixteen, and so on. So you never get the exact angle. You get the " +
+      "nearest one they can express, like reading off a ruler that only has so many marks on it. More " +
+      "helpers, more marks, closer answer. But there is a twist worth knowing: if the real angle sits " +
+      "right between two marks, the answer gets less certain rather than more, because it cannot decide " +
+      "between them.",
     observe:
-      "φ = 0.400 read with 3 bits gives 0.375, error 0.025, with 87.7% on the peak. With 4 bits it still reads 0.375 — but 0.400 now sits nearly halfway between grid points and the peak falls to 57.4%. With 8 bits it reads 0.398438, error 0.001562.",
-    action: "Read it with 3 bits",
+      "With three helpers the answer comes back 0.375 nearly nine times out of ten. With four it is still 0.375 — but the true value now sits almost exactly between two marks, so you only get it about half the time.",
+    action: "Read it with three helpers",
     setup: { systemIndex: 0, bits: 3, time: 3.2, stageIndex: 4 }
   }
 ];

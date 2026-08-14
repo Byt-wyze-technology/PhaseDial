@@ -21,7 +21,7 @@ test("expands a lesson and applies its setup to the lab", async ({ page }) => {
   await lesson.click();
   await expect(lesson).toHaveAttribute("aria-expanded", "true");
 
-  await page.getByRole("button", { name: /Read it with 3 bits/ }).click();
+  await page.getByRole("button", { name: /Read it with three helpers/ }).click();
   await expect(page.getByLabel("Ancilla qubits")).toHaveValue("3");
   await expect(page.getByLabel("Evolution time")).toHaveValue("3.2");
 });

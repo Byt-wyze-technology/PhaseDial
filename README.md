@@ -226,6 +226,34 @@ examples classically.
 
 ---
 
+## Ten guided lessons
+
+If you would rather be walked through it than read about it, the app has ten
+short lessons at the bottom of the page. They go from *why would anyone want
+this* to *why the answer is never quite exact*:
+
+1. The simulation problem
+2. Energy eigenstates
+3. Time evolution as rotation
+4. The phase as information
+5. Classical frequency estimation
+6. Controlled evolution
+7. Phase kickback
+8. The quantum Fourier transform
+9. The full QPE circuit
+10. Precision and scale
+
+Each one is a few plain sentences with no equations, and a button that sets the
+lab up to show exactly what the lesson just described — loading the four-level
+system, starting the clock, or dropping to three helper qubits so you can watch
+the answer lose precision.
+
+The lesson text lives in `src/lessons.ts` as ordinary data. If you teach this
+and want to reword a lesson, add one, or write a set in another language, that
+is the only file you need to touch. No React required.
+
+---
+
 ## Try it yourself
 
 You need Node.js 24 or later and npm 10 or later.
@@ -278,9 +306,13 @@ npm run screenshots
 - `src/engine.ts` — phase wrapping and circular distance, the finite-bit
   estimate, ideal QPE probabilities, and measurement sampling.
 - `src/App.tsx` — the interactive lesson, controls, and visualizations.
+- `src/lessons.ts` — the ten guided lessons, as plain data.
+- `src/LessonList.tsx` — the lesson list and its setup buttons.
 - `src/engine.test.ts` — deterministic numerical invariant and boundary tests.
 - `tests/phase-boundary.pw.ts` — Chromium regression coverage for the
   zero-one phase boundary and measurement interaction.
+- `tests/learn.pw.ts` — Chromium coverage for the lessons and the live
+  probability total.
 - `scripts/capture-readme-screenshots.mjs` — captures the three figures above
   from the production build.
 - `docs/` — the product vision, implemented mathematical model, architecture,
