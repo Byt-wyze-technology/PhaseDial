@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import {
   distribution, nearestEstimate, phaseDistance, phaseFromEnergy, seededMeasure, Stage, stages
 } from "./engine";
+import LessonList from "./LessonList";
+import type { LessonSetup } from "./lessons";
 
 const systems = [
   { name: "Two-level atom", energy: Math.PI / 4, levels: [0, Math.PI / 4], note: "The cleanest phase clock" },
@@ -99,7 +101,20 @@ export default function App() {
   }, [playing]);
 
   const next = () => setStageIndex(value => Math.min(stages.length - 1, value + 1));
+  const norm = useMemo(() => data.reduce((sum, item) => sum + item.probability, 0), [data]);
   const maxProbability = Math.max(...data.map(item => item.probability));
+
+  const applyLesson = (setup: LessonSetup) => {
+    if (setup.systemIndex !== undefined) setSystemIndex(setup.systemIndex);
+    if (setup.bits !== undefined) setBits(setup.bits);
+    if (setup.time !== undefined) {
+      setPlaying(false);
+      setTime(setup.time);
+    }
+    if (setup.stageIndex !== undefined) setStageIndex(setup.stageIndex);
+    document.getElementById(setup.scrollTo ?? "lab")?.scrollIntoView({ behavior: "smooth" });
+  };
+
   const visibleDistribution = bits <= 6 ? data : data.filter((_, i) => i % (2 ** (bits - 6)) === 0 || Math.abs(i - estimate.index) < 3);
 
   return (
@@ -176,7 +191,9 @@ export default function App() {
           <div className="workspace">
             <div className="workspace-head">
               <div><span className="step-number">{stages[stageIndex].short}</span><div><small>{copy.eyebrow}</small><h3>{copy.title}</h3></div></div>
-              <span className="invariant">NORM = 1.000 ✓</span>
+              <span className="invariant" title="Total probability across every register outcome, summed live.">
+                NORM = {norm.toFixed(3)} {Math.abs(norm - 1) < 1e-9 ? "✓" : "✗"}
+              </span>
             </div>
             <div className="visual-grid">
               <div className="dial-panel">
@@ -247,14 +264,12 @@ export default function App() {
       </section>
 
       <section className="learn" id="learn">
-        <div><p className="kicker">KEEP EXPLORING</p><h2>One idea.<br />Ten experiments.</h2></div>
-        <div className="module-list">
-          {["The simulation problem", "Energy eigenstates", "Time evolution as rotation", "The phase as information", "Classical frequency estimation", "Controlled evolution", "Phase kickback", "The quantum Fourier transform", "The full QPE circuit", "Precision and scale"].map((name, i) => (
-            <button key={name} onClick={() => { setStageIndex(Math.min(4, Math.floor(i / 2))); document.getElementById("lab")?.scrollIntoView({ behavior: "smooth" }); }}>
-              <span>{String(i + 1).padStart(2, "0")}</span><b>{name}</b><em>↗</em>
-            </button>
-          ))}
+        <div>
+          <p className="kicker">KEEP EXPLORING</p>
+          <h2>One idea.<br />Ten experiments.</h2>
+          <p className="learn-lede">Each lesson sets the lab up to show exactly what it describes. Every number quoted is one the simulator produces.</p>
         </div>
+        <LessonList onApply={applyLesson} />
       </section>
 
       <footer className="footer">

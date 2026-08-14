@@ -25,6 +25,10 @@ that work.
 - Ideal finite-register QPE probability chart and sampled measurement readout.
 - Deterministic inverse-CDF measurement sampling, verified against the
   analytical distribution by chi-square goodness-of-fit test.
+- Ten guided lessons that configure the lab to demonstrate what each one
+  describes, with every quoted figure produced by the engine.
+- A live probability-normalization readout summed from the active
+  distribution.
 - Classical-frequency and quantum-phase-estimation comparison.
 - Responsive interface and reduced-motion support.
 - Mathematical engine tests for phase conversion, phase wrapping, finite
