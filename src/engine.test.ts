@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   clampPhase,
   distribution,
+  mulberry32,
   nearestEstimate,
   phaseDistance,
   phaseFromEnergy,
@@ -12,6 +13,70 @@ import {
 const ancillaCounts = [2, 3, 4, 5, 6, 7, 8];
 const representativePhases = [0, 0.000001, 0.123456, 0.5, 0.99, 1 - 1e-9, -0.125, 1.375];
 const probabilityTolerance = 1e-12;
+
+/**
+ * Chi-square critical values at alpha = 0.001, indexed by degrees of freedom.
+ * Every statistical assertion below runs over a fixed seed range, so each
+ * statistic is a deterministic constant and cannot flake.
+ */
+const chiSquareCritical: Record<number, number> = {
+  1: 10.828,
+  15: 37.697,
+  19: 43.82,
+  21: 46.797,
+  45: 82.72
+};
+
+function pearsonCorrelation(a: number[], b: number[]) {
+  const n = a.length;
+  const meanA = a.reduce((s, v) => s + v, 0) / n;
+  const meanB = b.reduce((s, v) => s + v, 0) / n;
+  let covariance = 0;
+  let varianceA = 0;
+  let varianceB = 0;
+  for (let i = 0; i < n; i++) {
+    covariance += (a[i] - meanA) * (b[i] - meanB);
+    varianceA += (a[i] - meanA) ** 2;
+    varianceB += (b[i] - meanB) ** 2;
+  }
+  return covariance / Math.sqrt(varianceA * varianceB);
+}
+
+/**
+ * Goodness of fit against the analytical distribution. Outcomes whose expected
+ * count falls below five are pooled into one residual bin, the standard
+ * validity condition for chi-square, which QPE tails would otherwise violate.
+ */
+function goodnessOfFit(phase: number, bits: number, samples: number) {
+  const values = distribution(phase, bits);
+  const total = values.reduce((sum, value) => sum + value.probability, 0);
+  const counts = new Map<number, number>();
+  for (let seed = 0; seed < samples; seed++) {
+    const outcome = seededMeasure(phase, bits, seed).outcome;
+    counts.set(outcome, (counts.get(outcome) ?? 0) + 1);
+  }
+
+  let statistic = 0;
+  let degreesOfFreedom = -1;
+  let pooledExpected = 0;
+  let pooledObserved = 0;
+  for (const value of values) {
+    const expected = (value.probability / total) * samples;
+    const observed = counts.get(value.outcome) ?? 0;
+    if (expected >= 5) {
+      statistic += (observed - expected) ** 2 / expected;
+      degreesOfFreedom++;
+    } else {
+      pooledExpected += expected;
+      pooledObserved += observed;
+    }
+  }
+  if (pooledExpected > 0) {
+    statistic += (pooledObserved - pooledExpected) ** 2 / pooledExpected;
+    degreesOfFreedom++;
+  }
+  return { statistic, degreesOfFreedom };
+}
 
 describe("PhaseDial engine", () => {
   it.each([
@@ -60,7 +125,7 @@ describe("PhaseDial engine", () => {
 
   it("conserves measurement probability", () => {
     const total = distribution(0.317, 6).reduce((sum, item) => sum + item.probability, 0);
-    expect(total).toBeCloseTo(1, 8);
+    expect(Math.abs(total - 1)).toBeLessThan(1e-12);
   });
 
   it("samples only declared register outcomes", () => {
@@ -142,6 +207,40 @@ describe("PhaseDial engine", () => {
     [1.375, 0.375]
   ])("assigns zero distance to equivalent wrapped phases %f and %f", (a, b) => {
     expect(phaseDistance(a, b)).toBeCloseTo(0, 12);
+  });
+
+  it("draws uniformly from consecutive integer seeds", () => {
+    const bins = 20;
+    const samples = 100000;
+    const counts = new Array(bins).fill(0);
+
+    for (let seed = 0; seed < samples; seed++) {
+      counts[Math.min(bins - 1, Math.floor(mulberry32(seed)() * bins))]++;
+    }
+
+    const expected = samples / bins;
+    const statistic = counts.reduce((sum, count) => sum + (count - expected) ** 2 / expected, 0);
+    expect(statistic).toBeLessThan(chiSquareCritical[bins - 1]);
+  });
+
+  it("keeps consecutive integer seeds uncorrelated", () => {
+    const draws = Array.from({ length: 100000 }, (_, seed) => mulberry32(seed)());
+    const correlation = pearsonCorrelation(draws.slice(0, -1), draws.slice(1));
+
+    expect(Math.abs(correlation)).toBeLessThan(0.05);
+  });
+
+  it.each([
+    [0.4, 4],
+    [0.317, 5],
+    [0.99, 6],
+    [0.123456, 3]
+  ])("samples the analytical distribution for phase %f with %i ancillas", (phase, bits) => {
+    const { statistic, degreesOfFreedom } = goodnessOfFit(phase, bits, 20000);
+    const critical = chiSquareCritical[degreesOfFreedom];
+
+    expect(critical).toBeDefined();
+    expect(statistic).toBeLessThan(critical);
   });
 
   it("reproduces sampling for identical inputs and seed sequences", () => {

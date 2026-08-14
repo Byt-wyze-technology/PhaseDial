@@ -125,10 +125,28 @@ $U_+$ selected above.
 
 ## Sampling
 
-`seededMeasure` selects one outcome from the calculated distribution using a
-deterministic pseudo-random value derived from an integer interaction seed.
-This makes repeated UI measurements varied but reproducible for a given state
-and seed. It is not a cryptographic random-number generator.
+`seededMeasure` draws one outcome by inverse-CDF sampling over $P(m)$. It walks
+the outcomes in order, subtracting each probability from a cursor, and returns
+the outcome at which the cursor is exhausted. The cursor is scaled by the summed
+probability rather than by 1, so the draw stays correct even if the sum departs
+from unity by floating-point residue.
+
+Inverse-CDF sampling is only faithful when the cursor is **uniform** on
+$[0,\sum_m P(m))$. The cursor comes from `mulberry32`, a deterministic 32-bit
+generator with period $2^{32}$ and no runtime dependency. Its output mixing
+keeps the *first* draw well distributed across consecutive integer seeds, which
+matters because the interface advances the measurement seed by one on each
+press.
+
+Sampling is fully deterministic: the same phase, ancilla count, and seed always
+yield the same outcome. It is not a cryptographic random-number generator.
+
+Fidelity is asserted rather than assumed. The suite runs a chi-square
+goodness-of-fit test against $P(m)$ over fixed seed ranges — pooling outcomes
+whose expected count falls below five, the standard validity condition, which
+QPE tails would otherwise violate — together with a uniformity test and a
+lag-1 serial-correlation bound on the generator itself. Fixed seed ranges make
+each statistic a deterministic constant, so the assertions cannot flake.
 
 ## Invariants
 
@@ -143,9 +161,10 @@ The implemented model is expected to maintain:
 The deterministic automated suite verifies phase conversion, phase wrapping,
 circular phase-distance properties, nearest-estimate error bounds, exact-grid
 concentration, finite and bounded probabilities, normalization across every UI
-ancilla size, valid outcome metadata, and reproducible seeded sampling. A
-Chromium regression also verifies the rendered estimate and error across the
-zero-one boundary.
+ancilla size, valid outcome metadata, reproducible seeded sampling, and
+goodness of fit between sampled and calculated distributions. A Chromium
+regression also verifies the rendered estimate and error across the zero-one
+boundary.
 
 The default conversion test uses $E=\pi/4$ and $t=3.2$, which gives
 $\phi=0.4$ under the $U_+$ convention. This non-half-turn case is intentionally

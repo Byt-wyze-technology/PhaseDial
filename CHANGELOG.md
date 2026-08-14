@@ -23,6 +23,8 @@ that work.
 - Adjustable evolution time and two-to-eight-bit ancilla precision.
 - Five-stage quantum phase-estimation learning flow.
 - Ideal finite-register QPE probability chart and sampled measurement readout.
+- Deterministic inverse-CDF measurement sampling, verified against the
+  analytical distribution by chi-square goodness-of-fit test.
 - Classical-frequency and quantum-phase-estimation comparison.
 - Responsive interface and reduced-motion support.
 - Mathematical engine tests for phase conversion, phase wrapping, finite
