@@ -7,6 +7,8 @@
 
 **See energy become a phase. Read the invisible dial.**
 
+**[Try PhaseDial live](https://byt-wyze-technology.github.io/PhaseDial/)**
+
 Quantum phase estimation is one of the most useful ideas in quantum computing.
 It sits inside algorithms for finding energies, simulating molecules, and
 factoring numbers. But it is often taught as a wall of circuit diagrams before
