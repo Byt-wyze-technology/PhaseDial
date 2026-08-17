@@ -10,7 +10,7 @@ tagged releases.
 
 Nothing yet.
 
-## [1.0.0] - 2026-08-14
+## [1.0.0] - 2026-08-17
 
 First tagged release. PhaseDial was developed in the open before this point but
 was never published under a version, so this entry consolidates the whole of
